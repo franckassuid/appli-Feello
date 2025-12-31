@@ -10,10 +10,9 @@ interface IntroBoxProps {
     onOpen: () => void;
 }
 
-const Model = ({ isOpen }: { isOpen: boolean }) => {
+const Model = () => {
     const { scene } = useGLTF('/boite_feeloo_v2.1.glb');
     const ref = useRef<THREE.Group>(null);
-    const openTimeRef = useRef<number | null>(null);
 
     const { size, viewport } = useThree();
 
@@ -125,7 +124,7 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
                     <pointLight position={[-10, 0, -10]} intensity={1.5} />
 
                     <Suspense fallback={null}>
-                        <Model isOpen={isOpen} />
+                        <Model />
                         <Environment preset="city" background={false} />
                         <ContactShadows position={[0, -2, 0]} opacity={0.6} scale={10} blur={2.5} far={10} color="#000000" />
                         <SceneController isOpen={isOpen} />
@@ -164,6 +163,35 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                     >
+                        {/* Close Button - Outside Card, Top Right of Screen */}
+                        <button
+                            className="close-btn"
+                            onClick={() => setShowRules(false)}
+                            style={{
+                                position: 'absolute',
+                                top: '2rem',
+                                right: '2rem',
+                                background: 'rgba(255,255,255,0.2)',
+                                backdropFilter: 'blur(4px)',
+                                border: '2px solid rgba(255,255,255,0.5)',
+                                borderRadius: '50%',
+                                width: '60px',
+                                height: '60px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: 'white',
+                                cursor: 'pointer',
+                                zIndex: 101, // Above everything
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+                            }}
+                        >
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 6L6 18" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M6 6L18 18" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </button>
+
                         <motion.div
                             className="rules-content"
                             onClick={e => e.stopPropagation()}
@@ -172,30 +200,10 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
                             exit={{ scale: 0.8, opacity: 0, y: 50 }}
                             transition={{ type: "spring", stiffness: 300, damping: 25 }}
                         >
-                            <button
-                                className="close-btn"
-                                onClick={() => setShowRules(false)}
-                                style={{
-                                    position: 'absolute',
-                                    top: '1rem',
-                                    right: '1rem',
-                                    background: 'none',
-                                    border: 'none',
-                                    color: 'white',
-                                    cursor: 'pointer',
-                                    padding: '0.5rem',
-                                    zIndex: 10
-                                }}
-                            >
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    <path d="M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                            </button>
-
                             <div className="rules-header">
                                 <span className="rules-top-left">LE JEU</span>
-                                <span className="rules-top-right">FEELLO</span>
+                                {/* Logo instead of text */}
+                                <img src="/logo.png" alt="Feello" style={{ height: '30px', width: 'auto' }} />
                             </div>
 
                             <div className="rules-pill">

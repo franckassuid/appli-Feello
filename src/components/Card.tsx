@@ -58,13 +58,24 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
                 x: isFront ? x : 0,
                 rotate: isFront ? rotate : 0,
                 zIndex: isFront ? 2 : 1,
-                scale: isFront ? 1 : 0.95, // Back card slightly smaller
-                y: isFront ? 0 : 10,       // Back card slighty lower
+                scale: isFront ? 1 : 0.95,
+                y: isFront ? 0 : 10,
             }}
             drag={isFront ? "x" : false}
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.6}
             onDragEnd={handleDragEnd}
+            onClick={(e) => {
+                if (!onSwipe) return;
+                const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const third = rect.width / 3;
+                if (clickX > 2 * third) {
+                    onSwipe('right');
+                } else if (clickX < third) {
+                    onSwipe('left');
+                }
+            }}
             animate={controls}
             // Animate layout changes specifically for the stack effect
             transition={{ layout: { duration: 0.3 } }}

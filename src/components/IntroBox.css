@@ -30,19 +30,22 @@
 
 .logo-container {
     position: absolute;
-    top: 15%;
-    /* Positioned well above the box */
+    top: 5vh;
+    /* Pushed higher for mobile */
     left: 0;
     width: 100%;
     display: flex;
     justify-content: center;
-    z-index: 2;
+    z-index: 10;
+    /* Ensure above button */
     pointer-events: none;
 }
 
 .intro-logo {
-    width: 280px;
-    /* Significantly larger as requested */
+    width: 300px;
+    /* Larger as requested */
+    max-width: 80%;
+    /* Responsive cap */
     height: auto;
     filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
 }

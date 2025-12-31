@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface FeelloButtonProps {
     onClick: () => void;
     label: string;
@@ -11,7 +9,6 @@ export const FeelloButton = ({ onClick, label, variant = 'primary', className = 
     // Colors
     const pink = "#c5267d";
     const white = "#f1efea";
-    const darkMetric = "#142823"; // Dark background estimate for stroke
 
     // Primary: Pink Fill, White Text
     // Secondary: Transparent Fill, White Stroke, White Text? Or White Fill?
