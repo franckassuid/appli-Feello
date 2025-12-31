@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from './Card';
 import type { Question } from '../data/questions';
 import './GameDeck.css';
@@ -10,6 +10,11 @@ interface GameDeckProps {
 
 export const GameDeck = ({ onHome, questions }: GameDeckProps) => {
     const [index, setIndex] = useState(0);
+
+    // Reset to first card when component mounts (when coming back to game)
+    useEffect(() => {
+        setIndex(0);
+    }, []);
 
     const questionIndex = ((index % questions.length) + questions.length) % questions.length;
     const currentQuestion = questions[questionIndex];

@@ -1,7 +1,7 @@
 import { motion, type PanInfo, useMotionValue, useTransform, useAnimation } from 'framer-motion';
 import { type Question, themes } from '../data/questions';
 import './Card.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface CardProps {
     question: Question;
@@ -12,9 +12,8 @@ interface CardProps {
 export const Card = ({ question, onSwipe, isFront }: CardProps) => {
     const x = useMotionValue(0);
     const controls = useAnimation();
-
-    // Rotation based on drag
     const rotate = useTransform(x, [-300, 300], [-15, 15]);
+    const [isDragging, setIsDragging] = useState(false);
 
     useEffect(() => {
         // When becoming front, ensure reset
@@ -24,28 +23,72 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
     }, [isFront, controls]);
 
     const handleDragEnd = async (_: any, info: PanInfo) => {
+        setIsDragging(false);
         if (!onSwipe) return;
         const threshold = 100;
         const velocity = info.velocity.x;
+        const screenWidth = window.innerWidth;
 
+        // Swipe right
         if (info.offset.x > threshold || velocity > 500) {
             await controls.start({
-                x: 800,
-                rotate: 30,
-                // opacity: 1, // Keep visible
-                transition: { duration: 0.3 }
+                x: screenWidth,
+                rotate: 45,
+                opacity: 0,
+                scale: 0.8,
+                transition: { duration: 0.4 }
             });
             onSwipe('right');
-        } else if (info.offset.x < -threshold || velocity < -500) {
+        }
+        // Swipe left
+        else if (info.offset.x < -threshold || velocity < -500) {
             await controls.start({
-                x: -800,
-                rotate: -30,
-                // opacity: 1, // Keep visible
-                transition: { duration: 0.3 }
+                x: -screenWidth,
+                rotate: -45,
+                opacity: 0,
+                scale: 0.8,
+                transition: { duration: 0.4 }
             });
             onSwipe('left');
-        } else {
-            controls.start({ x: 0, transition: { type: "spring", stiffness: 500, damping: 30 } });
+        }
+        // Return to center
+        else {
+            controls.start({
+                x: 0,
+                opacity: 1,
+                scale: 1,
+                rotate: 0,
+                transition: { type: "spring", stiffness: 500, damping: 30 }
+            });
+        }
+    };
+
+    const handleClick = (e: React.MouseEvent) => {
+        // Don't handle click if we just finished dragging
+        if (isDragging || !onSwipe || !isFront) return;
+
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const third = rect.width / 3;
+
+        if (clickX > 2 * third) {
+            // Clicked on right third - swipe right with animation
+            controls.start({
+                x: window.innerWidth,
+                rotate: 45,
+                opacity: 0,
+                scale: 0.8,
+                transition: { duration: 0.4 }
+            }).then(() => onSwipe('right'));
+        } else if (clickX < third) {
+            // Clicked on left third - swipe left with animation
+            controls.start({
+                x: -window.innerWidth,
+                rotate: -45,
+                opacity: 0,
+                scale: 0.8,
+                transition: { duration: 0.4 }
+            }).then(() => onSwipe('left'));
         }
     };
 
@@ -64,20 +107,10 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
             drag={isFront ? "x" : false}
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.6}
+            onDragStart={() => setIsDragging(true)}
             onDragEnd={handleDragEnd}
-            onClick={(e) => {
-                if (!onSwipe) return;
-                const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
-                const third = rect.width / 3;
-                if (clickX > 2 * third) {
-                    onSwipe('right');
-                } else if (clickX < third) {
-                    onSwipe('left');
-                }
-            }}
+            onClick={handleClick}
             animate={controls}
-            // Animate layout changes specifically for the stack effect
             transition={{ layout: { duration: 0.3 } }}
         >
             <div
