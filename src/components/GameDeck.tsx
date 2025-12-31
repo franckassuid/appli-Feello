@@ -42,7 +42,6 @@ export const GameDeck = ({ onHome }: GameDeckProps) => {
                     <Card
                         key={index}
                         question={currentQuestion}
-                        custom={direction}
                         onSwipe={handleSwipe}
                     />
                 </AnimatePresence>

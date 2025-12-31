@@ -6,10 +6,9 @@ import { useEffect } from 'react';
 interface CardProps {
     question: Question;
     onSwipe: (direction: 'left' | 'right') => void;
-    custom: number;
 }
 
-export const Card = ({ question, onSwipe, custom }: CardProps) => {
+export const Card = ({ question, onSwipe }: CardProps) => {
     const x = useMotionValue(0);
     const controls = useAnimation();
 
