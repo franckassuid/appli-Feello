@@ -25,9 +25,9 @@ function App() {
         ) : (
           <motion.div
             key="game"
-            // Enter instantly (behind the box)
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
+            // Wait for Box to be full size (1.0s) before showing cards behind it
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { delay: 1.0, duration: 0 } }}
             // On Exit (Return to Home): STAY VISIBLE (opacity 1) so the box falls ON TOP of it
             exit={{ opacity: 1, transition: { duration: 1 } }}
             className="game-wrapper"

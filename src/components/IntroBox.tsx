@@ -14,6 +14,22 @@ const Model = ({ isOpen }: { isOpen: boolean }) => {
     const ref = useRef<THREE.Group>(null);
     const openTimeRef = useRef<number | null>(null);
 
+    const { size, viewport } = useThree();
+
+    // Dynamic Scale Calculation
+    // We want the box to cover the card (505px height + buffer)
+    // Model unit height approx 27 units? Tuned to match previous 0.09 at ~800H
+    const CARD_HEIGHT_PX = 505;
+    const PADDING_PX = 20;
+    const MODEL_HEIGHT_FACTOR = 27;
+
+    // Convert pixels to 3D units at z=0 (default viewport depth)
+    const pixelToThreeRatio = viewport.height / size.height;
+    const targetHeightThree = (CARD_HEIGHT_PX + PADDING_PX) * pixelToThreeRatio;
+
+    const targetScale = targetHeightThree / MODEL_HEIGHT_FACTOR;
+    const idleScale = targetScale * 0.8; // Start slightly smaller
+
     // Initial rotation (Opposite wide face) as requested
     const INITIAL_ROTATION_Y = Math.PI * 1.5 + 0.5;
 
@@ -27,6 +43,8 @@ const Model = ({ isOpen }: { isOpen: boolean }) => {
                 ref.current.rotation.y = INITIAL_ROTATION_Y;
                 ref.current.rotation.x = 0;
                 ref.current.rotation.z = 0;
+                // Update scale in case of resize
+                ref.current.scale.setScalar(idleScale);
 
                 openTimeRef.current = null;
             } else {
@@ -42,22 +60,21 @@ const Model = ({ isOpen }: { isOpen: boolean }) => {
                     const t = elapsed / 1.0;
                     const ease = 1 - Math.pow(1 - t, 3);
 
-                    // Target Rotation: Math.PI * 1.5 (270deg) - Inverse of previous
+                    // Target Rotation: Math.PI * 1.5 (270deg)
                     ref.current.rotation.y = THREE.MathUtils.lerp(INITIAL_ROTATION_Y, Math.PI * 1.5, ease);
 
                     // Center Y
                     ref.current.position.y = THREE.MathUtils.lerp(0, 0, ease);
 
-                    // Target Scale: 0.09 (Reduced from 0.13 to match card size)
-                    const targetScale = 0.09;
-                    const currentScale = THREE.MathUtils.lerp(0.07, targetScale, ease);
+                    // Scale Up to Target
+                    const currentScale = THREE.MathUtils.lerp(idleScale, targetScale, ease);
                     ref.current.scale.setScalar(currentScale);
                 }
                 // Phase 2: HOLD (1.0s to 1.5s)
                 else if (elapsed < 1.5) {
                     ref.current.rotation.y = Math.PI * 1.5;
                     ref.current.position.y = 0;
-                    ref.current.scale.setScalar(0.09);
+                    ref.current.scale.setScalar(targetScale);
                 }
                 // Phase 3: SLOW DROP (1.5s onwards)
                 else {
@@ -65,7 +82,7 @@ const Model = ({ isOpen }: { isOpen: boolean }) => {
                     ref.current.position.y = 0 - (dropElapsed * dropElapsed * 2);
 
                     ref.current.rotation.y = Math.PI * 1.5;
-                    ref.current.scale.setScalar(0.09);
+                    ref.current.scale.setScalar(targetScale);
                 }
             }
         }
@@ -75,15 +92,15 @@ const Model = ({ isOpen }: { isOpen: boolean }) => {
         if (!isOpen && ref.current) {
             ref.current.position.set(0, 0, 0);
             ref.current.rotation.set(0, INITIAL_ROTATION_Y, 0);
-            ref.current.scale.setScalar(0.07);
+            ref.current.scale.setScalar(idleScale);
         }
-    }, [isOpen]);
+    }, [isOpen, idleScale]);
 
     return (
         <primitive
             object={scene}
             ref={ref}
-            scale={0.07}
+            // scale managed by logic
             rotation={[0, INITIAL_ROTATION_Y, 0]}
             onPointerOver={() => (document.body.style.cursor = 'grab')}
             onPointerOut={() => (document.body.style.cursor = 'auto')}
