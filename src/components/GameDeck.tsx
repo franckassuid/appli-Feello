@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
 import { Card } from './Card';
 import { questions } from '../data/questions';
 import './GameDeck.css';
@@ -10,7 +9,6 @@ interface GameDeckProps {
 
 export const GameDeck = ({ onHome }: GameDeckProps) => {
     const [index, setIndex] = useState(0);
-    const [direction, setDirection] = useState(0);
 
     const questionIndex = ((index % questions.length) + questions.length) % questions.length;
     const currentQuestion = questions[questionIndex];
@@ -20,10 +18,8 @@ export const GameDeck = ({ onHome }: GameDeckProps) => {
 
     const handleSwipe = (swipeDirection: 'left' | 'right') => {
         if (swipeDirection === 'left') {
-            setDirection(-1);
             setIndex((prev) => prev - 1);
         } else {
-            setDirection(1);
             setIndex((prev) => prev + 1);
         }
     };

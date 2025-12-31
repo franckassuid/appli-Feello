@@ -15,8 +15,6 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
 
     // Rotation based on drag
     const rotate = useTransform(x, [-300, 300], [-15, 15]);
-    // Opacity fades out only when dragged REALLY far (effectively never during drag)
-    const opacity = useTransform(x, [-800, -200, 0, 200, 800], [0.5, 1, 1, 1, 0.5]);
 
     useEffect(() => {
         // When becoming front, ensure reset
