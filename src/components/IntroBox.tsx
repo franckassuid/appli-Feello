@@ -37,37 +37,35 @@ const Model = ({ isOpen }: { isOpen: boolean }) => {
 
                 const elapsed = state.clock.elapsedTime - openTimeRef.current;
 
-                // Phase 1: ROTATE TO FRONT & SCALE (0s to 1.0s)
+                // Phase 1: ROTATE TO FRONT (Inverse Wide Face) & SCALE (0s to 1.0s)
                 if (elapsed < 1.0) {
                     const t = elapsed / 1.0;
                     const ease = 1 - Math.pow(1 - t, 3);
 
-                    // To Front
-                    ref.current.rotation.y = THREE.MathUtils.lerp(INITIAL_ROTATION_Y, Math.PI, ease);
+                    // Target Rotation: Math.PI * 1.5 (270deg) - Inverse of previous
+                    ref.current.rotation.y = THREE.MathUtils.lerp(INITIAL_ROTATION_Y, Math.PI * 1.5, ease);
 
-                    // To Center
+                    // Center Y
                     ref.current.position.y = THREE.MathUtils.lerp(0, 0, ease);
 
-                    // Scale Up
-                    const targetScale = 0.085;
+                    // Target Scale: 0.09 (Reduced from 0.13 to match card size)
+                    const targetScale = 0.09;
                     const currentScale = THREE.MathUtils.lerp(0.07, targetScale, ease);
                     ref.current.scale.setScalar(currentScale);
                 }
-                // Phase 2: HOLD (1.0s to 1.5s) - Stay perfectly still
+                // Phase 2: HOLD (1.0s to 1.5s)
                 else if (elapsed < 1.5) {
-                    ref.current.rotation.y = Math.PI;
+                    ref.current.rotation.y = Math.PI * 1.5;
                     ref.current.position.y = 0;
-                    ref.current.scale.setScalar(0.085);
+                    ref.current.scale.setScalar(0.09);
                 }
                 // Phase 3: SLOW DROP (1.5s onwards)
                 else {
                     const dropElapsed = elapsed - 1.5;
-                    // Slower drop (gravity factor 2)
                     ref.current.position.y = 0 - (dropElapsed * dropElapsed * 2);
 
-                    // Maintain orientation
-                    ref.current.rotation.y = Math.PI;
-                    ref.current.scale.setScalar(0.085);
+                    ref.current.rotation.y = Math.PI * 1.5;
+                    ref.current.scale.setScalar(0.09);
                 }
             }
         }

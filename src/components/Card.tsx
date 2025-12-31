@@ -15,8 +15,8 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
 
     // Rotation based on drag
     const rotate = useTransform(x, [-300, 300], [-15, 15]);
-    // Opacity fades out only when dragged far
-    const opacity = useTransform(x, [-300, -100, 0, 100, 300], [0, 1, 1, 1, 0]);
+    // Opacity fades out only when dragged REALLY far (effectively never during drag)
+    const opacity = useTransform(x, [-800, -200, 0, 200, 800], [0.5, 1, 1, 1, 0.5]);
 
     useEffect(() => {
         // When becoming front, ensure reset
@@ -34,7 +34,7 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
             await controls.start({
                 x: 800,
                 rotate: 30,
-                opacity: 0,
+                // opacity: 1, // Keep visible
                 transition: { duration: 0.3 }
             });
             onSwipe('right');
@@ -42,7 +42,7 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
             await controls.start({
                 x: -800,
                 rotate: -30,
-                opacity: 0,
+                // opacity: 1, // Keep visible
                 transition: { duration: 0.3 }
             });
             onSwipe('left');
