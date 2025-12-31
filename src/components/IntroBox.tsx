@@ -139,23 +139,23 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
 
             {!isOpen && (
                 <>
-                    {/* Diagonal "L'appli" button */}
+                    {/* "L'appli" button positioned on logo */}
                     <motion.div
-                        initial={{ opacity: 0, x: -20, y: -20 }}
-                        animate={{ opacity: 1, x: 0, y: 0 }}
-                        transition={{ delay: 0.3 }}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.3, type: "spring" }}
                         style={{
                             position: 'absolute',
-                            top: '15%',
-                            left: '10%',
-                            zIndex: 3,
-                            transform: 'rotate(-15deg)',
+                            top: '6vh',
+                            left: '58%',
+                            zIndex: 11,
+                            transform: 'rotate(15deg)',
                         }}
                     >
                         <FeelloButton
                             label="L'appli"
                             onClick={() => { }}
-                            variant="secondary"
+                            variant="primary"
                         />
                     </motion.div>
 
