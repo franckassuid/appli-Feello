@@ -10,8 +10,6 @@ interface GameDeckProps {
 
 export const GameDeck = ({ onHome, questions }: GameDeckProps) => {
     const [index, setIndex] = useState(0);
-    const [animatingCard, setAnimatingCard] = useState<Question | null>(null);
-    const [animatingDirection, setAnimatingDirection] = useState<'left' | 'right' | null>(null);
 
     // Reset to first card when component mounts (when coming back to game)
     useEffect(() => {
@@ -25,23 +23,11 @@ export const GameDeck = ({ onHome, questions }: GameDeckProps) => {
     const nextQuestion = questions[nextIndex];
 
     const handleSwipe = (swipeDirection: 'left' | 'right') => {
-        // Store the current card as animating
-        setAnimatingCard(currentQuestion);
-        setAnimatingDirection(swipeDirection);
-
-        // Change index after animation completes
-        setTimeout(() => {
-            if (swipeDirection === 'left') {
-                setIndex((prev) => prev - 1);
-            } else {
-                setIndex((prev) => prev + 1);
-            }
-            // Clear animating card after a bit more delay to ensure smooth transition
-            setTimeout(() => {
-                setAnimatingCard(null);
-                setAnimatingDirection(null);
-            }, 100);
-        }, 450);
+        if (swipeDirection === 'left') {
+            setIndex((prev) => prev - 1);
+        } else {
+            setIndex((prev) => prev + 1);
+        }
     };
 
     return (
@@ -64,26 +50,13 @@ export const GameDeck = ({ onHome, questions }: GameDeckProps) => {
                 isFront={false}
             />
 
-            {/* Animating Card (if any) */}
-            {animatingCard && (
-                <Card
-                    key={`animating-${animatingCard.id}`}
-                    question={animatingCard}
-                    isFront={true}
-                    onSwipe={() => { }} // No swipe during animation
-                    forceAnimate={animatingDirection}
-                />
-            )}
-
-            {/* Front Card (Current) - only show if not animating */}
-            {!animatingCard && (
-                <Card
-                    key={`front-${currentQuestion.id}`}
-                    question={currentQuestion}
-                    isFront={true}
-                    onSwipe={handleSwipe}
-                />
-            )}
+            {/* Front Card (Current) */}
+            <Card
+                key={`front-${currentQuestion.id}`}
+                question={currentQuestion}
+                isFront={true}
+                onSwipe={handleSwipe}
+            />
 
             <div className="deck-instruction">
                 <button
