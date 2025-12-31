@@ -30,6 +30,13 @@ function App() {
     return initialQuestions;
   });
 
+  useEffect(() => {
+    // Basic routing check
+    if (window.location.pathname === '/admin') {
+      setView('admin');
+    }
+  }, []);
+
   const handleAddQuestion = (q: Omit<Question, 'id'>) => {
     const newQ = { ...q, id: Date.now() };
     const newQuestions = [...questions, newQ];
@@ -49,16 +56,6 @@ function App() {
             className="intro-wrapper"
           >
             <IntroBox onOpen={() => setView('game')} />
-
-            {/* Discreet Admin Link */}
-            <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 100 }}>
-              <button
-                onClick={() => setView('admin')}
-                style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.1)', cursor: 'pointer', fontSize: '0.8rem' }}
-              >
-                Admin
-              </button>
-            </div>
           </motion.div>
         )}
 

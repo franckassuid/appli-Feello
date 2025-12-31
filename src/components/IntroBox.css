@@ -28,6 +28,25 @@
     margin-bottom: 5vh;
 }
 
+.logo-container {
+    position: absolute;
+    top: 15%;
+    /* Positioned well above the box */
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.intro-logo {
+    width: 280px;
+    /* Significantly larger as requested */
+    height: auto;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+}
+
 .button-group {
     display: flex;
     flex-direction: column;

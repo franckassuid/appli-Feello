@@ -4,6 +4,7 @@ import { useState, useRef, Suspense, useEffect } from 'react';
 import * as THREE from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 import './IntroBox.css';
+import { FeelloButton } from './FeelloButton';
 
 interface IntroBoxProps {
     onOpen: () => void;
@@ -101,8 +102,22 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
         onOpen();
     };
 
+
+
     return (
         <div className="scene-container">
+            {/* Logo Overlay */}
+            {!isOpen && (
+                <motion.div
+                    className="logo-container"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                >
+                    <img src="/logo.png" alt="Feello" className="intro-logo" />
+                </motion.div>
+            )}
+
             <div className="canvas-wrapper">
                 <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }}>
                     <ambientLight intensity={2.0} />
@@ -126,12 +141,16 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
                     transition={{ delay: 0.2 }}
                 >
                     <div className="button-group">
-                        <button className="action-btn secondary" onClick={() => setShowRules(true)}>
-                            Règles du jeu
-                        </button>
-                        <button className="action-btn primary" onClick={handleStart}>
-                            Commencer
-                        </button>
+                        <FeelloButton
+                            label="Règles du jeu"
+                            onClick={() => setShowRules(true)}
+                            variant="secondary"
+                        />
+                        <FeelloButton
+                            label="Commencer"
+                            onClick={handleStart}
+                            variant="primary"
+                        />
                     </div>
                 </motion.div>
             )}
