@@ -7,9 +7,10 @@ interface CardProps {
     question: Question;
     onSwipe?: (direction: 'left' | 'right') => void;
     isFront: boolean;
+    forceAnimate?: 'left' | 'right' | null;
 }
 
-export const Card = ({ question, onSwipe, isFront }: CardProps) => {
+export const Card = ({ question, onSwipe, isFront, forceAnimate }: CardProps) => {
     const x = useMotionValue(0);
     const controls = useAnimation();
     const rotate = useTransform(x, [-300, 300], [-15, 15]);
@@ -21,6 +22,20 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
             controls.start({ x: 0, opacity: 1, scale: 1, rotate: 0 });
         }
     }, [isFront, controls]);
+
+    // Force animation when forceAnimate prop is set
+    useEffect(() => {
+        if (forceAnimate) {
+            const screenWidth = window.innerWidth;
+            controls.start({
+                x: forceAnimate === 'right' ? screenWidth : -screenWidth,
+                rotate: forceAnimate === 'right' ? 45 : -45,
+                opacity: 0,
+                scale: 0.8,
+                transition: { duration: 0.4 }
+            });
+        }
+    }, [forceAnimate, controls]);
 
     const handleDragEnd = async (_: any, info: PanInfo) => {
         setIsDragging(false);

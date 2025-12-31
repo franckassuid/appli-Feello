@@ -19,7 +19,7 @@
 }
 
 .main-logo {
-    height: 32px;
+    height: 50px;
     filter: brightness(0) invert(1);
     transition: opacity 0.2s;
 }
