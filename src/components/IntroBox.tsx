@@ -16,19 +16,22 @@ const Model = ({ isOpen }: { isOpen: boolean }) => {
 
     const { size, viewport } = useThree();
 
-    // Dynamic Scale Calculation
-    // We want the box to cover the card (505px height + buffer)
-    // Model unit height approx 27 units? Tuned to match previous 0.09 at ~800H
-    const CARD_HEIGHT_PX = 505;
+    // Dynamic Scale Calculation matching CSS: min(505px, 65vh)
+    const MAX_CARD_HEIGHT_PX = 505;
+    const VH_FACTOR = 0.65;
     const PADDING_PX = 20;
     const MODEL_HEIGHT_FACTOR = 27;
 
-    // Convert pixels to 3D units at z=0 (default viewport depth)
+    // Calculate height in pixels (replicating CSS logic)
+    // Note: size.height is roughly window.innerHeight since canvas is full screen
+    const cardHeightPx = Math.min(MAX_CARD_HEIGHT_PX, size.height * VH_FACTOR);
+
+    // Convert to 3D units
     const pixelToThreeRatio = viewport.height / size.height;
-    const targetHeightThree = (CARD_HEIGHT_PX + PADDING_PX) * pixelToThreeRatio;
+    const targetHeightThree = (cardHeightPx + PADDING_PX) * pixelToThreeRatio;
 
     const targetScale = targetHeightThree / MODEL_HEIGHT_FACTOR;
-    const idleScale = targetScale * 0.8; // Start slightly smaller
+    const idleScale = targetScale * 0.8;
 
     // Initial rotation (Opposite wide face) as requested
     const INITIAL_ROTATION_Y = Math.PI * 1.5 + 0.5;
