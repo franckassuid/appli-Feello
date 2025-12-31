@@ -103,6 +103,7 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
                 zIndex: isFront ? 2 : 1,
                 scale: isFront ? 1 : 0.95,
                 y: isFront ? 0 : 10,
+                pointerEvents: isFront ? 'auto' : 'none',
             }}
             drag={isFront ? "x" : false}
             dragConstraints={{ left: 0, right: 0 }}

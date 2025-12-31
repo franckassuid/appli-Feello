@@ -119,14 +119,14 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
 
             <div className="canvas-wrapper">
                 <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }}>
-                    <ambientLight intensity={2.0} />
-                    <spotLight position={[10, 10, 10]} angle={0.3} penumbra={1} intensity={2.5} />
-                    <pointLight position={[-10, 0, -10]} intensity={1.5} />
+                    <ambientLight intensity={4.5} />
+                    <spotLight position={[10, 10, 10]} angle={0.3} penumbra={1} intensity={3.0} />
+                    <pointLight position={[-10, 0, -10]} intensity={3.0} />
 
                     <Suspense fallback={null}>
                         <Model />
                         <Environment preset="city" background={false} />
-                        <ContactShadows position={[0, -2, 0]} opacity={0.6} scale={10} blur={2.5} far={10} color="#000000" />
+                        <ContactShadows position={[0, -.8, 0]} opacity={1} scale={10} blur={2.5} far={10} color="#000000" />
                         <SceneController isOpen={isOpen} />
                     </Suspense>
                 </Canvas>
