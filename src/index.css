@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+
+:root {
+  --color-orange: #E68C3C;
+  --color-dark-green: #20473C;
+  --color-olive: #7F802F;
+  --color-pink: #E7237F;
+  --color-purple: #736FAD;
+  --color-cream: #F5F1E8;
+
+  --font-main: 'Quicksand', sans-serif;
+  --radius-card: 24px;
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-dark-green);
+  /* Add texture */
+  background-image: url('/bg-texture.png');
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: overlay;
+  /* Blend nicely with the dark green */
+
+  color: white;
+  min-height: 100vh;
+  min-width: 320px;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#root {
+  width: 100%;
+  max-width: 500px;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+}

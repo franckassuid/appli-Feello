@@ -1,0 +1,126 @@
+.card-container {
+    width: 320px;
+    height: 520px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important;
+    transform-style: preserve-3d;
+    cursor: grab;
+    z-index: 10;
+    touch-action: none;
+}
+
+.card-container:active {
+    cursor: grabbing;
+}
+
+.card-content {
+    width: 100%;
+    height: 100%;
+    /* Background color is set inline */
+    border-radius: 20px;
+    /* Slightly tighter radius */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    /* Border to make it pop slightly */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* TOP ELEMENTS */
+.card-header {
+    position: absolute;
+    top: 2rem;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    /* Centers the pill */
+    z-index: 2;
+    pointer-events: none;
+}
+
+.card-letter {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.1);
+    /* Darker transparent for orange bg */
+    line-height: 1;
+}
+
+.card-pill {
+    background: white;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: lowercase;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    /* Color set inline */
+    transform: rotate(-3deg);
+    /* Slight playful tilt */
+    margin-top: 0.5rem;
+    z-index: 10;
+}
+
+/* CENTER TEXT */
+.card-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    z-index: 2;
+    padding: 0 1rem;
+}
+
+.question-text {
+    font-family: inherit;
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.35;
+    color: white;
+    /* text-shadow: 0 2px 4px rgba(0,0,0,0.05); */
+}
+
+/* BOTTOM ELEMENTS */
+.card-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    /* Centers the logo */
+    align-items: center;
+    z-index: 2;
+    padding-bottom: 0.5rem;
+}
+
+.card-logo {
+    height: 38px;
+    width: auto;
+    filter: brightness(0) invert(1);
+    /* Pure white */
+}
+
+.card-symbol {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    /* Smaller icon size */
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.1);
+    /* Match letter style */
+}
