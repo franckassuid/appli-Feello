@@ -138,47 +138,25 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
             </div>
 
             {!isOpen && (
-                <>
-                    {/* "L'appli" button positioned on logo */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.3, type: "spring" }}
-                        style={{
-                            position: 'absolute',
-                            top: '6vh',
-                            left: '58%',
-                            zIndex: 11,
-                            transform: 'rotate(15deg)',
-                        }}
-                    >
+                <motion.div
+                    className="intro-ui"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                >
+                    <div className="button-group">
                         <FeelloButton
-                            label="L'appli"
-                            onClick={() => { }}
+                            label="Règles du jeu"
+                            onClick={() => setShowRules(true)}
+                            variant="secondary"
+                        />
+                        <FeelloButton
+                            label="Commencer"
+                            onClick={handleStart}
                             variant="primary"
                         />
-                    </motion.div>
-
-                    <motion.div
-                        className="intro-ui"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                    >
-                        <div className="button-group">
-                            <FeelloButton
-                                label="Règles du jeu"
-                                onClick={() => setShowRules(true)}
-                                variant="secondary"
-                            />
-                            <FeelloButton
-                                label="Commencer"
-                                onClick={handleStart}
-                                variant="primary"
-                            />
-                        </div>
-                    </motion.div>
-                </>
+                    </div>
+                </motion.div>
             )}
 
             <AnimatePresence>
