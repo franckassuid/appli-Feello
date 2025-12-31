@@ -10,6 +10,7 @@ type View = 'intro' | 'game' | 'admin';
 
 function App() {
   const [view, setView] = useState<View>('intro');
+  const [introKey, setIntroKey] = useState(0);
   const [questions, setQuestions] = useState<Question[]>(() => {
     // Load from local storage or use initial
     const saved = localStorage.getItem('feello-questions');
@@ -44,12 +45,17 @@ function App() {
     localStorage.setItem('feello-questions', JSON.stringify(newQuestions));
   };
 
+  const handleBackToIntro = () => {
+    setIntroKey(prev => prev + 1); // Increment to force remount
+    setView('intro');
+  };
+
   return (
     <div className="app-container">
       <AnimatePresence mode="wait">
         {view === 'intro' && (
           <motion.div
-            key="intro"
+            key={`intro-${introKey}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.3 } }}
@@ -68,7 +74,7 @@ function App() {
             className="game-wrapper"
           >
             <GameDeck
-              onHome={() => setView('intro')}
+              onHome={handleBackToIntro}
               questions={questions}
             />
           </motion.div>
