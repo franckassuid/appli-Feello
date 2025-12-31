@@ -9,12 +9,12 @@ function App() {
 
   return (
     <div className="app-container">
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {!gameStarted ? (
           <motion.div
             key="intro"
-            exit={{ opacity: 0, scale: 1.5, pointerEvents: 'none' }}
-            transition={{ duration: 0.8 }}
+            // Exit: Wait for 1.5s while the box falls, then fade out
+            exit={{ opacity: 0, transition: { delay: 0.8, duration: 0.5 } }}
             className="intro-wrapper"
           >
             <IntroBox onOpen={() => setGameStarted(true)} />
@@ -22,9 +22,9 @@ function App() {
         ) : (
           <motion.div
             key="game"
-            initial={{ opacity: 0 }}
+            // Enter instantly (behind the box)
+            initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 1 }}
             className="game-wrapper"
           >
             <GameDeck onHome={() => setGameStarted(false)} />
