@@ -89,8 +89,8 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
                 </div>
 
                 <div className="card-footer">
-                    <img src="/logo.png" alt="Feello" className="card-logo" />
-                    <span className="card-symbol" style={{ opacity: 0.2 }}>{question.category}</span>
+                    {/* Logo removed */}
+                    <span className="card-symbol">{question.category}</span>
                 </div>
             </div>
         </motion.div>

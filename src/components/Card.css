@@ -59,14 +59,15 @@
 .card-pill {
     background: white;
     padding: 6px 16px;
-    border-radius: 100px;
+    border-radius: 5px;
+    /* Requested change */
     font-size: 0.8rem;
     font-weight: 700;
     text-transform: lowercase;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     /* Color set inline */
-    transform: rotate(-3deg);
-    /* Slight playful tilt */
+    transform: none;
+    /* Removed -3deg rotation */
     margin-top: 0.5rem;
     z-index: 10;
 }
@@ -102,26 +103,24 @@
     height: 80px;
     display: flex;
     justify-content: center;
-    /* Centers the logo */
     align-items: center;
     z-index: 2;
     padding-bottom: 0.5rem;
 }
 
 .card-logo {
-    height: 38px;
-    width: auto;
-    filter: brightness(0) invert(1);
-    /* Pure white */
+    display: none;
+    /* Logo removed */
 }
 
 .card-symbol {
     position: absolute;
     bottom: 1.5rem;
     right: 1.5rem;
-    font-size: 1.5rem;
-    /* Smaller icon size */
-    font-weight: 900;
+    font-size: 2.2rem;
+    /* Matches bigger letter size */
+    font-weight: 800;
     color: rgba(0, 0, 0, 0.1);
-    /* Match letter style */
+    transform: rotate(180deg);
+    /* Requested change */
 }

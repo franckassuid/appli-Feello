@@ -37,20 +37,37 @@ const Model = ({ isOpen }: { isOpen: boolean }) => {
 
                 const elapsed = state.clock.elapsedTime - openTimeRef.current;
 
-                // Phase 1: ROTATE TO FRONT (0s to 0.6s)
-                if (elapsed < 0.6) {
-                    const t = elapsed / 0.6;
+                // Phase 1: ROTATE TO FRONT & SCALE (0s to 1.0s)
+                if (elapsed < 1.0) {
+                    const t = elapsed / 1.0;
                     const ease = 1 - Math.pow(1 - t, 3);
 
+                    // To Front
                     ref.current.rotation.y = THREE.MathUtils.lerp(INITIAL_ROTATION_Y, Math.PI, ease);
-                    ref.current.position.y = THREE.MathUtils.lerp(0, 0.5, ease);
+
+                    // To Center
+                    ref.current.position.y = THREE.MathUtils.lerp(0, 0, ease);
+
+                    // Scale Up
+                    const targetScale = 0.085;
+                    const currentScale = THREE.MathUtils.lerp(0.07, targetScale, ease);
+                    ref.current.scale.setScalar(currentScale);
                 }
-                // Phase 2: DROP (0.6s onwards)
+                // Phase 2: HOLD (1.0s to 1.5s) - Stay perfectly still
+                else if (elapsed < 1.5) {
+                    ref.current.rotation.y = Math.PI;
+                    ref.current.position.y = 0;
+                    ref.current.scale.setScalar(0.085);
+                }
+                // Phase 3: SLOW DROP (1.5s onwards)
                 else {
-                    const dropElapsed = elapsed - 0.6;
-                    ref.current.position.y = 0.5 - (dropElapsed * dropElapsed * 5);
-                    ref.current.rotation.x += 0.05;
-                    ref.current.rotation.z += 0.02;
+                    const dropElapsed = elapsed - 1.5;
+                    // Slower drop (gravity factor 2)
+                    ref.current.position.y = 0 - (dropElapsed * dropElapsed * 2);
+
+                    // Maintain orientation
+                    ref.current.rotation.y = Math.PI;
+                    ref.current.scale.setScalar(0.085);
                 }
             }
         }
@@ -60,6 +77,7 @@ const Model = ({ isOpen }: { isOpen: boolean }) => {
         if (!isOpen && ref.current) {
             ref.current.position.set(0, 0, 0);
             ref.current.rotation.set(0, INITIAL_ROTATION_Y, 0);
+            ref.current.scale.setScalar(0.07);
         }
     }, [isOpen]);
 
