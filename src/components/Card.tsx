@@ -111,6 +111,8 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
             onDragEnd={handleDragEnd}
             onClick={handleClick}
             animate={controls}
+            initial={{ opacity: 1, scale: isFront ? 1 : 0.95 }}
+            exit={{ opacity: 0 }}
             transition={{ layout: { duration: 0.3 } }}
         >
             <div
