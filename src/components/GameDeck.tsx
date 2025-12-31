@@ -15,6 +15,9 @@ export const GameDeck = ({ onHome }: GameDeckProps) => {
     const questionIndex = ((index % questions.length) + questions.length) % questions.length;
     const currentQuestion = questions[questionIndex];
 
+    const nextIndex = ((index + 1) % questions.length + questions.length) % questions.length;
+    const nextQuestion = questions[nextIndex];
+
     const handleSwipe = (swipeDirection: 'left' | 'right') => {
         if (swipeDirection === 'left') {
             setDirection(-1);
@@ -37,15 +40,22 @@ export const GameDeck = ({ onHome }: GameDeckProps) => {
                 />
             </div>
 
-            <div className="cards-container">
-                <AnimatePresence initial={false} custom={direction} mode="popLayout">
-                    <Card
-                        key={index}
-                        question={currentQuestion}
-                        onSwipe={handleSwipe}
-                    />
-                </AnimatePresence>
-            </div>
+            {/* Stack Implementation */}
+
+            {/* Back Card (Next) */}
+            <Card
+                key={nextQuestion.id} // Ensure Key changes
+                question={nextQuestion}
+                isFront={false}
+            />
+
+            {/* Front Card (Current) */}
+            <Card
+                key={currentQuestion.id}
+                question={currentQuestion}
+                isFront={true}
+                onSwipe={handleSwipe}
+            />
 
             <div className="deck-instruction">
                 <button

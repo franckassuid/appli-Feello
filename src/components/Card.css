@@ -1,6 +1,7 @@
 .card-container {
     width: 320px;
-    height: 520px;
+    height: 505px;
+    /* Ratio ~1.58 (Credit Card Portrait) */
     position: absolute;
     top: 50%;
     left: 50%;

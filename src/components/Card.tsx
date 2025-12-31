@@ -5,50 +5,48 @@ import { useEffect } from 'react';
 
 interface CardProps {
     question: Question;
-    onSwipe: (direction: 'left' | 'right') => void;
+    onSwipe?: (direction: 'left' | 'right') => void;
+    isFront: boolean;
 }
 
-export const Card = ({ question, onSwipe }: CardProps) => {
+export const Card = ({ question, onSwipe, isFront }: CardProps) => {
     const x = useMotionValue(0);
     const controls = useAnimation();
 
-    // Simpler, cleaner rotation and opacity
+    // Rotation based on drag
     const rotate = useTransform(x, [-300, 300], [-15, 15]);
+    // Opacity fades out only when dragged far
     const opacity = useTransform(x, [-300, -100, 0, 100, 300], [0, 1, 1, 1, 0]);
 
     useEffect(() => {
-        // Reset position when question changes (new card)
-        x.set(0);
-        controls.start({
-            x: 0,
-            opacity: 1,
-            scale: 1,
-            transition: { type: "spring", stiffness: 300, damping: 20 }
-        });
-    }, [question, controls, x]);
+        // When becoming front, ensure reset
+        if (isFront) {
+            controls.start({ x: 0, opacity: 1, scale: 1, rotate: 0 });
+        }
+    }, [isFront, controls]);
 
     const handleDragEnd = async (_: any, info: PanInfo) => {
+        if (!onSwipe) return;
         const threshold = 100;
         const velocity = info.velocity.x;
 
         if (info.offset.x > threshold || velocity > 500) {
-            // Swipe Right
             await controls.start({
-                x: 500,
+                x: 800,
+                rotate: 30,
                 opacity: 0,
-                transition: { duration: 0.2 }
+                transition: { duration: 0.3 }
             });
             onSwipe('right');
         } else if (info.offset.x < -threshold || velocity < -500) {
-            // Swipe Left
             await controls.start({
-                x: -500,
+                x: -800,
+                rotate: -30,
                 opacity: 0,
-                transition: { duration: 0.2 }
+                transition: { duration: 0.3 }
             });
             onSwipe('left');
         } else {
-            // Return to center
             controls.start({ x: 0, transition: { type: "spring", stiffness: 500, damping: 30 } });
         }
     };
@@ -58,16 +56,20 @@ export const Card = ({ question, onSwipe }: CardProps) => {
     return (
         <motion.div
             className="card-container"
-            style={{ x, rotate, opacity }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }} // Free drag but snap back
+            style={{
+                x: isFront ? x : 0,
+                rotate: isFront ? rotate : 0,
+                zIndex: isFront ? 2 : 1,
+                scale: isFront ? 1 : 0.95, // Back card slightly smaller
+                y: isFront ? 0 : 10,       // Back card slighty lower
+            }}
+            drag={isFront ? "x" : false}
+            dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.6}
             onDragEnd={handleDragEnd}
             animate={controls}
-            initial={{ scale: 0.8, opacity: 0, y: 50 }}
-
-        // Layout ID helps with smooth morphing if we had shared elements, 
-        // but for stack cards we rely on entering animation
+            // Animate layout changes specifically for the stack effect
+            transition={{ layout: { duration: 0.3 } }}
         >
             <div
                 className="card-content"

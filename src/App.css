@@ -3,8 +3,12 @@
   height: 100vh;
   position: relative;
   overflow: hidden;
-  background-color: #142823;
-  /* Matching the dark green theme */
+  background-color: #20473C;
+  /* Lighter Green */
+  background-image: url('/bg-texture.png');
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: overlay;
 }
 
 /* Ensure overlap */
