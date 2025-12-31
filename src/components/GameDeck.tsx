@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { Card } from './Card';
-import { questions } from '../data/questions';
+import type { Question } from '../data/questions';
 import './GameDeck.css';
 
 interface GameDeckProps {
     onHome: () => void;
+    questions: Question[];
 }
 
-export const GameDeck = ({ onHome }: GameDeckProps) => {
+export const GameDeck = ({ onHome, questions }: GameDeckProps) => {
     const [index, setIndex] = useState(0);
 
     const questionIndex = ((index % questions.length) + questions.length) % questions.length;

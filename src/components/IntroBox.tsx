@@ -38,66 +38,20 @@ const Model = ({ isOpen }: { isOpen: boolean }) => {
 
     useFrame((state) => {
         if (ref.current) {
-            if (!isOpen) {
-                // Gentle idle hover
-                ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.05;
-                ref.current.position.x = 0;
-                ref.current.position.z = 0;
-                ref.current.rotation.y = INITIAL_ROTATION_Y;
-                ref.current.rotation.x = 0;
-                ref.current.rotation.z = 0;
-                // Update scale in case of resize
-                ref.current.scale.setScalar(idleScale);
+            // Constant Idle Hover
+            ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.05;
+            ref.current.position.x = 0;
+            ref.current.position.z = 0;
+            ref.current.rotation.y = INITIAL_ROTATION_Y + Math.sin(state.clock.elapsedTime * 0.2) * 0.1; // Slow rotation sway
+            ref.current.rotation.x = 0;
+            ref.current.rotation.z = 0;
 
-                openTimeRef.current = null;
-            } else {
-                // ANIMATION SEQUENCE
-                if (openTimeRef.current === null) {
-                    openTimeRef.current = state.clock.elapsedTime;
-                }
-
-                const elapsed = state.clock.elapsedTime - openTimeRef.current;
-
-                // Phase 1: ROTATE TO FRONT (Inverse Wide Face) & SCALE (0s to 1.0s)
-                if (elapsed < 1.0) {
-                    const t = elapsed / 1.0;
-                    const ease = 1 - Math.pow(1 - t, 3);
-
-                    // Target Rotation: Math.PI * 1.5 (270deg)
-                    ref.current.rotation.y = THREE.MathUtils.lerp(INITIAL_ROTATION_Y, Math.PI * 1.5, ease);
-
-                    // Center Y
-                    ref.current.position.y = THREE.MathUtils.lerp(0, 0, ease);
-
-                    // Scale Up to Target
-                    const currentScale = THREE.MathUtils.lerp(idleScale, targetScale, ease);
-                    ref.current.scale.setScalar(currentScale);
-                }
-                // Phase 2: HOLD (1.0s to 1.5s)
-                else if (elapsed < 1.5) {
-                    ref.current.rotation.y = Math.PI * 1.5;
-                    ref.current.position.y = 0;
-                    ref.current.scale.setScalar(targetScale);
-                }
-                // Phase 3: SLOW DROP (1.5s onwards)
-                else {
-                    const dropElapsed = elapsed - 1.5;
-                    ref.current.position.y = 0 - (dropElapsed * dropElapsed * 2);
-
-                    ref.current.rotation.y = Math.PI * 1.5;
-                    ref.current.scale.setScalar(targetScale);
-                }
-            }
+            // Ensure scale is correct
+            ref.current.scale.setScalar(idleScale);
         }
     });
 
-    useEffect(() => {
-        if (!isOpen && ref.current) {
-            ref.current.position.set(0, 0, 0);
-            ref.current.rotation.set(0, INITIAL_ROTATION_Y, 0);
-            ref.current.scale.setScalar(idleScale);
-        }
-    }, [isOpen, idleScale]);
+    // useEffect for reset is removed as the model is always idle now
 
     return (
         <primitive

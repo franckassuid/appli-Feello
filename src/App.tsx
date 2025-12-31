@@ -1,38 +1,95 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IntroBox } from './components/IntroBox';
 import { GameDeck } from './components/GameDeck';
+import { AdminPanel } from './components/AdminPanel';
 import { AnimatePresence, motion } from 'framer-motion';
+import { questions as initialQuestions, type Question } from './data/questions';
 import './App.css';
 
+type View = 'intro' | 'game' | 'admin';
+
 function App() {
-  const [gameStarted, setGameStarted] = useState(false);
+  const [view, setView] = useState<View>('intro');
+  const [questions, setQuestions] = useState<Question[]>(() => {
+    // Load from local storage or use initial
+    const saved = localStorage.getItem('feello-questions');
+    try {
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Basic validation or merging could happen here
+        // For now, if we have saved questions, use them.
+        // Option: Merge initial with saved if needed? 
+        // Let's assume saved replaces/extends. If user adds Qs, they want them.
+        // Simplest: If saved exists, use it. But what if we updated initial code?
+        // Let's rely on saved.
+        return parsed.length > 0 ? parsed : initialQuestions;
+      }
+    } catch (e) {
+      console.error("Failed to parse questions", e);
+    }
+    return initialQuestions;
+  });
+
+  const handleAddQuestion = (q: Omit<Question, 'id'>) => {
+    const newQ = { ...q, id: Date.now() };
+    const newQuestions = [...questions, newQ];
+    setQuestions(newQuestions);
+    localStorage.setItem('feello-questions', JSON.stringify(newQuestions));
+  };
 
   return (
     <div className="app-container">
-      <AnimatePresence>
-        {!gameStarted ? (
+      <AnimatePresence mode="wait">
+        {view === 'intro' && (
           <motion.div
             key="intro"
-            initial={{ opacity: 0, y: -500 }} // Fall in from top? Or just appear?
-            animate={{ opacity: 1, y: 0 }}
-            // Exit: Wait for 2.5s (1.5s prep + 1s drop) then fade out
-            exit={{ opacity: 0, transition: { delay: 2.0, duration: 0.5 } }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.3 } }}
             className="intro-wrapper"
           >
-            <IntroBox onOpen={() => setGameStarted(true)} />
+            <IntroBox onOpen={() => setView('game')} />
+
+            {/* Discreet Admin Link */}
+            <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 100 }}>
+              <button
+                onClick={() => setView('admin')}
+                style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.1)', cursor: 'pointer', fontSize: '0.8rem' }}
+              >
+                Admin
+              </button>
+            </div>
           </motion.div>
-        ) : (
+        )}
+
+        {view === 'game' && (
           <motion.div
             key="game"
-            // Wait for Box to be full size (1.0s) before showing cards behind it
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { delay: 1.0, duration: 0 } }}
-            // On Exit (Return to Home): STAY VISIBLE (opacity 1) so the box falls ON TOP of it
-            exit={{ opacity: 1, transition: { duration: 1 } }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             className="game-wrapper"
           >
-            <GameDeck onHome={() => setGameStarted(false)} />
+            <GameDeck
+              onHome={() => setView('intro')}
+              questions={questions}
+            />
+          </motion.div>
+        )}
+
+        {view === 'admin' && (
+          <motion.div
+            key="admin"
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 50 }}
+          >
+            <AdminPanel
+              questions={questions}
+              onAddQuestion={handleAddQuestion}
+              onBack={() => setView('intro')}
+            />
           </motion.div>
         )}
       </AnimatePresence>
@@ -40,4 +97,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
