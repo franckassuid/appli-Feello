@@ -37,7 +37,7 @@ export const GameDeck = ({ onHome, questions }: GameDeckProps) => {
                     src="/logo.png"
                     alt="Feello"
                     className="main-logo"
-                    onClick={onHome}
+                    onClick={() => window.location.reload()}
                     style={{ cursor: 'pointer' }}
                 />
             </div>
