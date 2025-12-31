@@ -4,11 +4,10 @@ import type { Question } from '../data/questions';
 import './GameDeck.css';
 
 interface GameDeckProps {
-    onHome: () => void;
     questions: Question[];
 }
 
-export const GameDeck = ({ onHome, questions }: GameDeckProps) => {
+export const GameDeck = ({ questions }: GameDeckProps) => {
     const [index, setIndex] = useState(0);
 
     // Reset to first card when component mounts (when coming back to game)
