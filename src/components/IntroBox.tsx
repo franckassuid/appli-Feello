@@ -96,6 +96,11 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [showRules, setShowRules] = useState(false);
 
+    // Reset state when component mounts (when returning from game)
+    useEffect(() => {
+        setIsOpen(false);
+    }, []);
+
     const handleStart = () => {
         setIsOpen(true);
         onOpen();
