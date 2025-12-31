@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card } from './Card';
 import type { Question } from '../data/questions';
-import { AnimatePresence } from 'framer-motion';
 import './GameDeck.css';
 
 interface GameDeckProps {
@@ -43,23 +42,21 @@ export const GameDeck = ({ onHome, questions }: GameDeckProps) => {
                 />
             </div>
 
-            {/* Stack Implementation with AnimatePresence */}
-            <AnimatePresence mode="popLayout">
-                {/* Back Card (Next) */}
-                <Card
-                    key={`back-${nextQuestion.id}`}
-                    question={nextQuestion}
-                    isFront={false}
-                />
+            {/* Stack Implementation */}
+            {/* Back Card (Next) */}
+            <Card
+                key={`back-${nextQuestion.id}`}
+                question={nextQuestion}
+                isFront={false}
+            />
 
-                {/* Front Card (Current) */}
-                <Card
-                    key={`front-${currentQuestion.id}`}
-                    question={currentQuestion}
-                    isFront={true}
-                    onSwipe={handleSwipe}
-                />
-            </AnimatePresence>
+            {/* Front Card (Current) */}
+            <Card
+                key={`front-${currentQuestion.id}`}
+                question={currentQuestion}
+                isFront={true}
+                onSwipe={handleSwipe}
+            />
 
             <div className="deck-instruction">
                 <button
