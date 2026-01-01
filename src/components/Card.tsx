@@ -1,7 +1,7 @@
 import { motion, type PanInfo, useMotionValue, useTransform, useAnimation } from 'framer-motion';
 import { type Question, themes } from '../data/questions';
 import './Card.css';
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle } from 'react';
 
 export interface CardHandle {
     swipe: (direction: 'left' | 'right') => Promise<void>;
