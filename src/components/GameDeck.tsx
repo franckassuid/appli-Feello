@@ -366,6 +366,7 @@ export const GameDeck = ({ questions }: GameDeckProps) => {
                         isFront={true}
                         onSwipe={handleSwipe}
                         onDragDirChange={handleDragDir}
+                        isFirstCard={index === 0}
                     />
                 )}
             </div>

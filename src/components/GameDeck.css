@@ -8,7 +8,7 @@
     justify-content: space-between;
     overflow: hidden;
     padding-top: 1rem;
-    padding-bottom: 4rem;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 30px);
     /* More space for bottom buttons/safe area */
 }
 
@@ -259,9 +259,10 @@
 }
 
 .social-link img {
-    width: 32px;
-    height: 32px;
+    width: 45px;
+    height: 45px;
     display: block;
+    object-fit: contain;
 }
 
 .social-link:hover {
@@ -512,9 +513,10 @@
 /* === CARD STACK DEPTH EFFECT === */
 .dummy-card-layer {
     grid-area: 1 / 1;
-    width: 100%;
-    max-width: 320px;
-    aspect-ratio: 3/4;
+    --max-h: 60dvh;
+    --ratio: calc(320 / 505);
+    height: min(505px, var(--max-h));
+    width: calc(min(505px, var(--max-h)) * var(--ratio));
     border-radius: 20px;
     background: #2a2a2a;
     pointer-events: none;

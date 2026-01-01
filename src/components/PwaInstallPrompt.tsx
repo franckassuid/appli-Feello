@@ -72,7 +72,7 @@ export const PwaInstallPrompt = () => {
                 <div className="pwa-header">
                     <div>
                         <h3 className="pwa-title">Installer l'application</h3>
-                        <p className="pwa-text">Profitez d'une expérience en plein écran pour profiter de Feello</p>
+                        <p className="pwa-text">Profitez d'une expérience optimale en plein écran !</p>
                     </div>
                     <button className="pwa-close-btn" onClick={handleDismiss}>✕</button>
                 </div>

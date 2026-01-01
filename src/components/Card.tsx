@@ -12,9 +12,10 @@ interface CardProps {
     onSwipe?: (direction: 'left' | 'right') => void;
     onDragDirChange?: (dir: 'left' | 'right' | null) => void;
     isFront: boolean;
+    isFirstCard?: boolean;
 }
 
-export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, onDragDirChange, isFront }, ref) => {
+export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, onDragDirChange, isFront, isFirstCard = false }, ref) => {
     const x = useMotionValue(0);
     // ... existing hooks
 
@@ -92,7 +93,7 @@ export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, onDr
             });
             onSwipe('right');
         }
-        else if (info.offset.x < -threshold || velocity < -500) {
+        else if ((info.offset.x < -threshold || velocity < -500) && !isFirstCard) {
             await controls.start({
                 x: -screenWidth - 200,
                 rotate: -45,
@@ -127,7 +128,7 @@ export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, onDr
             }}
             drag={isFront ? "x" : false}
             dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.6}
+            dragElastic={{ left: isFirstCard ? 0 : 0.6, right: 0.6 }}
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}
             animate={controls}
