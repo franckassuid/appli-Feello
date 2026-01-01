@@ -35,6 +35,19 @@ function App() {
     return () => unsubscribe();
   }, []);
 
+  // Fail-safe timeout: if Firestore takes too long (e.g. offline/cache issues), force load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (loading) {
+        console.warn("Firestore timeout - forcing app load with local data");
+        if (questions.length === 0) setQuestions(initialQuestions);
+        setLoading(false);
+      }
+    }, 4000); // 4 seconds max wait
+
+    return () => clearTimeout(timer);
+  }, [loading, questions]);
+
   const handleAddQuestion = async (q: Omit<Question, 'id'>) => {
     try {
       await addQuestionToFirebase(q);
