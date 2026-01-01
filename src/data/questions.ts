@@ -1,7 +1,7 @@
 export type ThemeColor = 'orange' | 'black' | 'olive' | 'pink' | 'blue';
 
 export interface Question {
-    id: number;
+    id: string | number;
     theme: ThemeColor;
     category: string; // The letter/text on top left (A, R, etc)
     tagline: string; // The small text on top

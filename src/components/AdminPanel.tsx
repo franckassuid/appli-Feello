@@ -6,10 +6,11 @@ import './AdminPanel.css';
 interface AdminPanelProps {
     questions: Question[];
     onAddQuestion: (q: Omit<Question, 'id'>) => void;
+    onMigrate?: () => Promise<void>;
     onBack: () => void;
 }
 
-export const AdminPanel = ({ questions, onAddQuestion, onBack }: AdminPanelProps) => {
+export const AdminPanel = ({ questions, onAddQuestion, onBack, onMigrate }: AdminPanelProps) => {
     const [newQuestion, setNewQuestion] = useState({
         theme: 'orange' as ThemeColor,
         category: '',
@@ -78,6 +79,18 @@ export const AdminPanel = ({ questions, onAddQuestion, onBack }: AdminPanelProps
                         </div>
                     ))}
                 </div>
+            </div>
+
+            <div className="admin-section">
+                <h3>Gestion Base de Données</h3>
+                {onMigrate && (
+                    <button
+                        onClick={onMigrate}
+                        style={{ background: '#4CAF50', width: '100%', marginBottom: '1rem' }}
+                    >
+                        📤 Migrer les questions vers Firebase
+                    </button>
+                )}
             </div>
 
             <div className="admin-section">

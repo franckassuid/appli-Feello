@@ -3,45 +3,47 @@ import { IntroBox } from './components/IntroBox';
 import { GameDeck } from './components/GameDeck';
 import { AdminPanel } from './components/AdminPanel';
 import { AnimatePresence, motion } from 'framer-motion';
-import { questions as initialQuestions, type Question } from './data/questions';
+import { type Question } from './data/questions';
+import { subscribeToQuestions, addQuestionToFirebase, migrateQuestionsToFirebase } from './services/questions';
 import './App.css';
 
 type View = 'intro' | 'game' | 'admin';
 
 function App() {
   const [view, setView] = useState<View>('intro');
-  const [questions, setQuestions] = useState<Question[]>(() => {
-    // Load from local storage or use initial
-    const saved = localStorage.getItem('feello-questions');
-    try {
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        // Basic validation or merging could happen here
-        // For now, if we have saved questions, use them.
-        // Option: Merge initial with saved if needed? 
-        // Let's assume saved replaces/extends. If user adds Qs, they want them.
-        // Simplest: If saved exists, use it. But what if we updated initial code?
-        // Let's rely on saved.
-        return parsed.length > 0 ? parsed : initialQuestions;
-      }
-    } catch (e) {
-      console.error("Failed to parse questions", e);
-    }
-    return initialQuestions;
-  });
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Basic routing check
     if (window.location.pathname === '/admin') {
       setView('admin');
     }
+
+    // Subscribe to Firestore updates
+    const unsubscribe = subscribeToQuestions((fetchedQuestions) => {
+      setQuestions(fetchedQuestions);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const handleAddQuestion = (q: Omit<Question, 'id'>) => {
-    const newQ = { ...q, id: Date.now() };
-    const newQuestions = [...questions, newQ];
-    setQuestions(newQuestions);
-    localStorage.setItem('feello-questions', JSON.stringify(newQuestions));
+  const handleAddQuestion = async (q: Omit<Question, 'id'>) => {
+    try {
+      await addQuestionToFirebase(q);
+      // No need to manually update state, subscription will handle it
+    } catch (e) {
+      console.error("Error adding question", e);
+      alert("Erreur lors de l'ajout (vérifiez la console)");
+    }
+  };
+
+  const handleMigrate = async () => {
+    if (window.confirm("Voulez-vous vraiment écraser/peupler la base Firebase avec les questions locales ?")) {
+      await migrateQuestionsToFirebase();
+      alert("Migration terminée !");
+    }
   };
 
   return (
@@ -67,9 +69,20 @@ function App() {
             exit={{ opacity: 0 }}
             className="game-wrapper"
           >
-            <GameDeck
-              questions={questions}
-            />
+            {loading ? (
+              <div style={{ color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                Chargement...
+              </div>
+            ) : questions.length > 0 ? (
+              <GameDeck
+                questions={questions}
+              />
+            ) : (
+              <div style={{ color: 'white', textAlign: 'center', padding: '2rem' }}>
+                <p>Aucune question trouvée.</p>
+                <p>Allez sur <a href="/admin" style={{ color: '#E7237F' }}>/admin</a> pour en ajouter.</p>
+              </div>
+            )}
           </motion.div>
         )}
 
@@ -84,6 +97,7 @@ function App() {
             <AdminPanel
               questions={questions}
               onAddQuestion={handleAddQuestion}
+              onMigrate={handleMigrate}
               onBack={() => setView('intro')}
             />
           </motion.div>
