@@ -4,7 +4,7 @@ import { GameDeck } from './components/GameDeck';
 import { AdminPanel } from './components/AdminPanel';
 import { AnimatePresence, motion } from 'framer-motion';
 import { questions as initialQuestions, type Question } from './data/questions';
-import { subscribeToQuestions, addQuestionToFirebase, updateQuestionInFirebase, deleteQuestionFromFirebase, migrateQuestionsToFirebase } from './services/questions';
+import { subscribeToQuestions, addQuestionToFirebase, updateQuestionInFirebase, deleteQuestionFromFirebase } from './services/questions';
 import './App.css';
 
 type View = 'intro' | 'game' | 'admin';
@@ -15,7 +15,6 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("App version: fixed-errors-ui v2");
     // Basic routing check
     if (window.location.pathname === '/admin') {
       setView('admin');
@@ -77,9 +76,7 @@ function App() {
     }
   };
 
-  const handleMigrate = async () => {
-    await migrateQuestionsToFirebase();
-  };
+
 
   return (
     <div className="app-container">
@@ -148,7 +145,6 @@ function App() {
               onAddQuestion={handleAddQuestion}
               onUpdateQuestion={handleUpdateQuestion}
               onDeleteQuestion={handleDeleteQuestion}
-              onMigrate={handleMigrate}
               onBack={() => setView('intro')}
             />
           </motion.div>

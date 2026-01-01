@@ -9,7 +9,7 @@ interface AdminPanelProps {
     onAddQuestion: (q: Omit<Question, 'id'>) => Promise<void>;
     onUpdateQuestion: (id: string, q: Partial<Question>) => Promise<void>;
     onDeleteQuestion: (id: string) => Promise<void>;
-    onMigrate?: () => Promise<void>;
+    onDeleteQuestion: (id: string) => Promise<void>;
     onBack: () => void;
 }
 
@@ -28,7 +28,7 @@ interface ConfirmationState {
     onConfirm: () => Promise<void>;
 }
 
-export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDeleteQuestion, onMigrate, onBack }: AdminPanelProps) => {
+export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDeleteQuestion, onBack }: AdminPanelProps) => {
     // Auth State
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [password, setPassword] = useState('');
@@ -117,21 +117,20 @@ export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDelet
             title,
             message,
             onConfirm: async () => {
-                console.log("Confirm clicked, starting action...");
-                setIsSubmitting(true);
-                try {
-                    await action();
-                    console.log("Action completed, closing modal.");
-                    closeConfirm();
-                } catch (error) {
-                    console.error("Action failed:", error);
-                    alert("Une erreur est survenue.");
-                    closeConfirm();
-                } finally {
-                    setIsSubmitting(false);
+                onConfirm: async () => {
+                    setIsSubmitting(true);
+                    try {
+                        await action();
+                        closeConfirm();
+                    } catch (error) {
+                        console.error("Action failed:", error);
+                        alert("Une erreur est survenue.");
+                        closeConfirm();
+                    } finally {
+                        setIsSubmitting(false);
+                    }
                 }
-            }
-        });
+            });
     };
 
     const handleDeleteClick = (e: React.MouseEvent, id: string) => {
@@ -219,30 +218,7 @@ export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDelet
 
 
             <div className="admin-content">
-                {onMigrate && (
-                    <div style={{ marginBottom: '1rem', padding: '0 1rem' }}>
-                        <button
-                            onClick={async () => {
-                                if (confirm('Voulez-vous vraiment importer les questions locales ? Cela ajoutera celles qui manquent à la base de données.')) {
-                                    await onMigrate();
-                                }
-                            }}
-                            className="action-btn"
-                            style={{
-                                padding: '0.5rem 1rem',
-                                background: '#E7237F',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '4px',
-                                cursor: 'pointer',
-                                fontSize: '0.9rem',
-                                width: '100%',
-                            }}
-                        >
-                            📤 Importer les questions locales (Migration)
-                        </button>
-                    </div>
-                )}
+
                 <div className="admin-column left-main">
                     <div className="admin-card create-card">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
