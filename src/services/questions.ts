@@ -12,6 +12,8 @@ export const subscribeToQuestions = (callback: (questions: Question[]) => void) 
             ...doc.data()
         })) as unknown as Question[]; // safe cast if schema matches
         callback(questions);
+    }, (error) => {
+        console.error("Firestore subscription error:", error);
     });
 };
 

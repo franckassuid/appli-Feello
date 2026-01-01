@@ -16,11 +16,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
-// Enable offline persistence
-enableMultiTabIndexedDbPersistence(db).catch((err) => {
-    if (err.code === 'failed-precondition') {
-        console.warn('Persistence failed: Multiple tabs open');
-    } else if (err.code === 'unimplemented') {
-        console.warn('Persistence not supported by browser');
-    }
-});
+// Offline persistence disabled to prevent "Invalid Segment" loops and cache corruption
+// enableMultiTabIndexedDbPersistence(db).catch((err) => console.warn('Persistence error', err));
