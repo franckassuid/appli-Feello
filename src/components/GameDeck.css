@@ -8,6 +8,8 @@
     justify-content: flex-start;
     overflow: hidden;
     padding-top: 2rem;
+    padding-bottom: 2rem;
+    /* Add padding at bottom */
 }
 
 .top-bar {
@@ -17,6 +19,7 @@
     justify-content: center;
     width: 100%;
     position: relative;
+    flex-shrink: 0;
 }
 
 .main-logo {
@@ -30,12 +33,14 @@
 
 .cards-stack {
     flex: 1;
+    /* Take all available space */
     width: 100%;
     display: grid;
     place-items: center;
     position: relative;
     /* Ensure cards grid doesn't overflow or break layout */
     min-height: 0;
+    z-index: 1;
 }
 
 /* Make sure cards stack directly on top of each other */
@@ -44,13 +49,14 @@
 }
 
 .deck-instruction {
-    position: absolute;
-    bottom: 2rem;
+    /* Remove absolute positioning so it sits in flow */
     width: 100%;
     display: flex;
     justify-content: center;
     gap: 3rem;
     z-index: 10;
+    flex-shrink: 0;
+    padding-top: 1rem;
 }
 
 .arrow-btn {

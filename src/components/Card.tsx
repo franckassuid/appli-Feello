@@ -10,11 +10,27 @@ export interface CardHandle {
 interface CardProps {
     question: Question;
     onSwipe?: (direction: 'left' | 'right') => void;
+    onDragDirChange?: (dir: 'left' | 'right' | null) => void;
     isFront: boolean;
 }
 
-export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, isFront }, ref) => {
+export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, onDragDirChange, isFront }, ref) => {
     const x = useMotionValue(0);
+    // ... existing hooks
+
+    const handleDrag = (_: any, info: PanInfo) => {
+        if (!onDragDirChange) return;
+        // Detect direction based on drag offset
+        if (info.offset.x > 5) {
+            onDragDirChange('right');
+        } else if (info.offset.x < -5) {
+            onDragDirChange('left');
+        } else {
+            onDragDirChange(null);
+        }
+    };
+
+    // ... existing useEffect
     const controls = useAnimation();
     const rotate = useTransform(x, [-300, 300], [-15, 15]);
     const [isDragging, setIsDragging] = useState(false);
@@ -140,6 +156,7 @@ export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, isFr
             drag={isFront ? "x" : false}
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.6}
+            onDrag={handleDrag}
             onDragStart={() => setIsDragging(true)}
             onDragEnd={handleDragEnd}
             onClick={handleClick}
