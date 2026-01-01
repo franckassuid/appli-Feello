@@ -5,49 +5,51 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
-    /* Push UI to bottom */
-    padding-bottom: 4rem;
+    justify-content: space-between;
+    /* Spread content out */
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    overflow: hidden;
+}
+
+.logo-container {
+    /* Put logo in flow */
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: none;
+    flex-shrink: 0;
+    padding-bottom: 2rem;
+}
+
+.intro-logo {
+    width: 200px;
+    max-width: 80%;
+    height: auto;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
 }
 
 .canvas-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
+    /* Canvas takes all remaining space */
+    position: relative;
+    flex: 1;
     width: 100%;
-    height: 100%;
+    /* Ensure it doesn't overflow */
+    min-height: 0;
     z-index: 1;
 }
 
 .intro-ui {
+    /* Put buttons in flow at bottom */
     position: relative;
     z-index: 2;
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 5vh;
-}
-
-.logo-container {
-    position: absolute;
-    top: 5vh;
-    /* Pushed higher for mobile */
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    z-index: 10;
-    /* Ensure above button */
-    pointer-events: none;
-}
-
-.intro-logo {
-    width: 300px;
-    /* Larger as requested */
-    max-width: 80%;
-    /* Responsive cap */
-    height: auto;
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+    flex-shrink: 0;
+    padding-top: 2rem;
 }
 
 .button-group {
@@ -81,7 +83,6 @@
 .action-btn.secondary {
     background: transparent;
     color: white;
-    /* Changed to white for better visibility on dark bg */
     border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
@@ -89,7 +90,7 @@
     transform: scale(0.96);
 }
 
-/* Rules Modal - Dark Card Style */
+/* Rules Modal */
 .rules-modal {
     position: fixed;
     top: 0;
@@ -97,7 +98,6 @@
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.85);
-    /* Darker backdrop to focus on card */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -108,12 +108,10 @@
 
 .rules-content {
     background: #142823;
-    /* Dark Green / Black similar to reference */
     color: white;
     padding: 2.5rem 2rem;
     border-radius: 24px;
     max-width: 360px;
-    /* Card size */
     width: 100%;
     text-align: center;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
@@ -122,7 +120,6 @@
     flex-direction: column;
     align-items: center;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    /* Subtle border */
 }
 
 .rules-header {
@@ -138,13 +135,10 @@
 }
 
 .rules-pill {
-    background: #D4AF37;
-    /* Gold color roughly matching image */
     background: linear-gradient(135deg, #c5a458 0%, #aa893c 100%);
     color: white;
     padding: 6px 16px;
     border-radius: 6px;
-    /* Slightly rounded rect, like reference */
     font-size: 1rem;
     font-weight: 700;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -185,7 +179,6 @@
 
 .rule-number {
     font-family: serif;
-    /* Fallback for handwriting style if not precise */
     font-style: italic;
     font-size: 2rem;
     font-weight: 400;
