@@ -3,7 +3,7 @@ import { IntroBox } from './components/IntroBox';
 import { GameDeck } from './components/GameDeck';
 import { AdminPanel } from './components/AdminPanel';
 import { AnimatePresence, motion } from 'framer-motion';
-import { type Question } from './data/questions';
+import { questions as initialQuestions, type Question } from './data/questions';
 import { subscribeToQuestions, addQuestionToFirebase, migrateQuestionsToFirebase } from './services/questions';
 import './App.css';
 
@@ -11,7 +11,7 @@ type View = 'intro' | 'game' | 'admin';
 
 function App() {
   const [view, setView] = useState<View>('intro');
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<Question[]>(initialQuestions);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,7 +22,13 @@ function App() {
 
     // Subscribe to Firestore updates
     const unsubscribe = subscribeToQuestions((fetchedQuestions) => {
-      setQuestions(fetchedQuestions);
+      if (fetchedQuestions.length > 0) {
+        setQuestions(fetchedQuestions);
+      } else {
+        // Fallback to local questions if DB is empty
+        // This allows seeing content before migration
+        setQuestions(initialQuestions);
+      }
       setLoading(false);
     });
 
