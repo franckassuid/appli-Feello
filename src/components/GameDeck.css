@@ -513,7 +513,7 @@
 /* === CARD STACK DEPTH EFFECT === */
 .dummy-card-layer {
     grid-area: 1 / 1;
-    --max-h: 60dvh;
+    --max-h: 55dvh;
     --ratio: calc(320 / 505);
     height: min(505px, var(--max-h));
     width: calc(min(505px, var(--max-h)) * var(--ratio));
@@ -569,5 +569,19 @@
 
     to {
         transform: rotate(360deg);
+    }
+}
+
+@media (max-height: 750px) {
+    .game-deck {
+        padding-top: 0.5rem;
+    }
+
+    .top-bar {
+        margin-bottom: 0.5rem;
+    }
+
+    .deck-instruction {
+        padding-top: 0.5rem;
     }
 }

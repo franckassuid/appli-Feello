@@ -1,7 +1,7 @@
 /* Define card dimensions variables for consistency if needed, avoiding :root for scope */
 .card-container {
     /* Responsive sizing: Max 320px width, Max 505px height, Max 60% viewport height (Dynamic) */
-    --max-h: 60dvh;
+    --max-h: 55dvh;
     --ratio: calc(320 / 505);
     height: min(505px, var(--max-h));
     width: calc(min(505px, var(--max-h)) * var(--ratio));
