@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Card } from './Card';
+import { useState, useEffect, useRef } from 'react';
+import { Card, type CardHandle } from './Card';
 import type { Question } from '../data/questions';
 import './GameDeck.css';
 
@@ -9,6 +9,7 @@ interface GameDeckProps {
 
 export const GameDeck = ({ questions }: GameDeckProps) => {
     const [index, setIndex] = useState(0);
+    const cardRef = useRef<CardHandle>(null);
 
     // Reset to first card when component mounts (when coming back to game)
     useEffect(() => {
@@ -26,6 +27,12 @@ export const GameDeck = ({ questions }: GameDeckProps) => {
             setIndex((prev) => prev - 1);
         } else {
             setIndex((prev) => prev + 1);
+        }
+    };
+
+    const handleButtonSwipe = (direction: 'left' | 'right') => {
+        if (cardRef.current) {
+            cardRef.current.swipe(direction);
         }
     };
 
@@ -51,6 +58,7 @@ export const GameDeck = ({ questions }: GameDeckProps) => {
 
             {/* Front Card (Current) */}
             <Card
+                ref={cardRef}
                 key={`front-${currentQuestion.id}`}
                 question={currentQuestion}
                 isFront={true}
@@ -60,13 +68,13 @@ export const GameDeck = ({ questions }: GameDeckProps) => {
             <div className="deck-instruction">
                 <button
                     className="arrow-btn"
-                    onClick={() => handleSwipe('left')}
+                    onClick={() => handleButtonSwipe('left')}
                 >
                     ← Précédent
                 </button>
                 <button
                     className="arrow-btn"
-                    onClick={() => handleSwipe('right')}
+                    onClick={() => handleButtonSwipe('right')}
                 >
                     Suivant →
                 </button>

@@ -1,7 +1,11 @@
 import { motion, type PanInfo, useMotionValue, useTransform, useAnimation } from 'framer-motion';
 import { type Question, themes } from '../data/questions';
 import './Card.css';
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+
+export interface CardHandle {
+    swipe: (direction: 'left' | 'right') => Promise<void>;
+}
 
 interface CardProps {
     question: Question;
@@ -9,16 +13,50 @@ interface CardProps {
     isFront: boolean;
 }
 
-export const Card = ({ question, onSwipe, isFront }: CardProps) => {
+export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, isFront }, ref) => {
     const x = useMotionValue(0);
     const controls = useAnimation();
     const rotate = useTransform(x, [-300, 300], [-15, 15]);
     const [isDragging, setIsDragging] = useState(false);
 
+    useImperativeHandle(ref, () => ({
+        swipe: async (direction: 'left' | 'right') => {
+            const screenWidth = window.innerWidth;
+            const xTarget = direction === 'right' ? screenWidth + 200 : -screenWidth - 200;
+            const rotTarget = direction === 'right' ? 45 : -45;
+
+            await controls.start({
+                x: xTarget,
+                rotate: rotTarget,
+                opacity: 0,
+                scale: 0.8,
+                transition: { duration: 0.3 }
+            });
+            if (onSwipe) onSwipe(direction);
+        }
+    }));
+
     useEffect(() => {
-        // When becoming front, ensure reset
         if (isFront) {
-            controls.start({ x: 0, opacity: 1, scale: 1, rotate: 0 });
+            controls.start({
+                x: 0,
+                opacity: 1,
+                scale: 1,
+                rotate: 0,
+                y: 0,
+                zIndex: 2,
+                transition: { duration: 0.3 }
+            });
+        } else {
+            controls.start({
+                x: 0,
+                opacity: 1,
+                scale: 0.95,
+                rotate: 0,
+                y: 10,
+                zIndex: 1,
+                transition: { duration: 0 }
+            });
         }
     }, [isFront, controls]);
 
@@ -29,42 +67,39 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
         const velocity = info.velocity.x;
         const screenWidth = window.innerWidth;
 
-        // Swipe right
         if (info.offset.x > threshold || velocity > 500) {
             await controls.start({
-                x: screenWidth,
+                x: screenWidth + 200,
                 rotate: 45,
                 opacity: 0,
                 scale: 0.8,
-                transition: { duration: 0.4 }
+                transition: { duration: 0.3 }
             });
             onSwipe('right');
         }
-        // Swipe left
         else if (info.offset.x < -threshold || velocity < -500) {
             await controls.start({
-                x: -screenWidth,
+                x: -screenWidth - 200,
                 rotate: -45,
                 opacity: 0,
                 scale: 0.8,
-                transition: { duration: 0.4 }
+                transition: { duration: 0.3 }
             });
             onSwipe('left');
         }
-        // Return to center
         else {
             controls.start({
                 x: 0,
                 opacity: 1,
                 scale: 1,
                 rotate: 0,
+                y: 0,
                 transition: { type: "spring", stiffness: 500, damping: 30 }
             });
         }
     };
 
     const handleClick = (e: React.MouseEvent) => {
-        // Don't handle click if we just finished dragging
         if (isDragging || !onSwipe || !isFront) return;
 
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
@@ -72,22 +107,20 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
         const third = rect.width / 3;
 
         if (clickX > 2 * third) {
-            // Clicked on right third - swipe right with animation
             controls.start({
-                x: window.innerWidth,
+                x: window.innerWidth + 200,
                 rotate: 45,
                 opacity: 0,
                 scale: 0.8,
-                transition: { duration: 0.4 }
+                transition: { duration: 0.3 }
             }).then(() => onSwipe('right'));
         } else if (clickX < third) {
-            // Clicked on left third - swipe left with animation
             controls.start({
-                x: -window.innerWidth,
+                x: -window.innerWidth - 200,
                 rotate: -45,
                 opacity: 0,
                 scale: 0.8,
-                transition: { duration: 0.4 }
+                transition: { duration: 0.3 }
             }).then(() => onSwipe('left'));
         }
     };
@@ -101,8 +134,6 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
                 x: isFront ? x : 0,
                 rotate: isFront ? rotate : 0,
                 zIndex: isFront ? 2 : 1,
-                scale: isFront ? 1 : 0.95,
-                y: isFront ? 0 : 10,
                 pointerEvents: isFront ? 'auto' : 'none',
             }}
             drag={isFront ? "x" : false}
@@ -112,9 +143,21 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
             onDragEnd={handleDragEnd}
             onClick={handleClick}
             animate={controls}
-            initial={{ opacity: 1, scale: isFront ? 1 : 0.95 }}
-            exit={{ opacity: 0 }}
-            transition={{ layout: { duration: 0.3 } }}
+            // Start at "Back" position if mounting as Front
+            initial={isFront ? {
+                scale: 0.95,
+                y: 10,
+                opacity: 1,
+                x: 0,
+                rotate: 0
+            } : {
+                scale: 0.95,
+                y: 10,
+                opacity: 1,
+                x: 0,
+                rotate: 0
+            }}
+            whileTap={isFront ? { scale: 0.98 } : {}}
         >
             <div
                 className="card-content"
@@ -134,10 +177,9 @@ export const Card = ({ question, onSwipe, isFront }: CardProps) => {
                 </div>
 
                 <div className="card-footer">
-                    {/* Logo removed */}
                     <span className="card-symbol">{question.category}</span>
                 </div>
             </div>
         </motion.div>
     );
-};
+});
