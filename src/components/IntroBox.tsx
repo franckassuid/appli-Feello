@@ -97,7 +97,6 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
     }, []);
 
     const handleStart = () => {
-        setIsOpen(true);
         onOpen();
     };
 
@@ -119,9 +118,9 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
 
             <div className="canvas-wrapper">
                 <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }}>
-                    <ambientLight intensity={4.5} />
+                    <ambientLight intensity={3} />
                     <spotLight position={[10, 10, 10]} angle={0.3} penumbra={1} intensity={3.0} />
-                    <pointLight position={[-10, 0, -10]} intensity={3.0} />
+                    <pointLight position={[-10, 0, -10]} intensity={1.0} />
 
                     <Suspense fallback={null}>
                         <Model />

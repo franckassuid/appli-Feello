@@ -51,8 +51,7 @@
 
 .card-letter {
     position: absolute;
-    top: 1.5rem;
-    left: 1.5rem;
+    left: 1rem;
     font-size: 2.2rem;
     font-weight: 800;
     color: rgba(0, 0, 0, 0.1);
@@ -62,8 +61,8 @@
 
 .card-pill {
     background: white;
-    padding: 6px 16px;
-    border-radius: 5px;
+    padding: 3px 7px;
+    border-radius: 2px;
     /* Requested change */
     font-size: 0.8rem;
     font-weight: 700;
@@ -90,7 +89,7 @@
 
 .question-text {
     font-family: inherit;
-    font-size: 1.6rem;
+    font-size: 1.3rem;
     font-weight: 700;
     text-align: center;
     line-height: 1.35;

@@ -4,7 +4,7 @@ import { GameDeck } from './components/GameDeck';
 import { AdminPanel } from './components/AdminPanel';
 import { AnimatePresence, motion } from 'framer-motion';
 import { questions as initialQuestions, type Question } from './data/questions';
-import { subscribeToQuestions, addQuestionToFirebase, migrateQuestionsToFirebase } from './services/questions';
+import { subscribeToQuestions, addQuestionToFirebase, updateQuestionInFirebase, deleteQuestionFromFirebase } from './services/questions';
 import './App.css';
 
 type View = 'intro' | 'game' | 'admin';
@@ -45,10 +45,19 @@ function App() {
     }
   };
 
-  const handleMigrate = async () => {
-    if (window.confirm("Voulez-vous vraiment écraser/peupler la base Firebase avec les questions locales ?")) {
-      await migrateQuestionsToFirebase();
-      alert("Migration terminée !");
+  const handleUpdateQuestion = async (id: string, updates: Partial<Question>) => {
+    try {
+      await updateQuestionInFirebase(id, updates);
+    } catch (error) {
+      alert("Erreur lors de la modification de la question.");
+    }
+  };
+
+  const handleDeleteQuestion = async (id: string) => {
+    try {
+      await deleteQuestionFromFirebase(id);
+    } catch (error) {
+      alert("Erreur lors de la suppression de la question.");
     }
   };
 
@@ -103,7 +112,8 @@ function App() {
             <AdminPanel
               questions={questions}
               onAddQuestion={handleAddQuestion}
-              onMigrate={handleMigrate}
+              onUpdateQuestion={handleUpdateQuestion}
+              onDeleteQuestion={handleDeleteQuestion}
               onBack={() => setView('intro')}
             />
           </motion.div>

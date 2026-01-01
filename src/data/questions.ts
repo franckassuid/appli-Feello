@@ -6,6 +6,7 @@ export interface Question {
     category: string; // The letter/text on top left (A, R, etc)
     tagline: string; // The small text on top
     text: string; // The main question
+    createdAt?: any; // Timestamp from Firestore
 }
 
 export const themes: Record<ThemeColor, string> = {
