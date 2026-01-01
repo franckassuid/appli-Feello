@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, type CardHandle } from './Card';
 import { type Question, type ThemeColor, themes } from '../data/questions';
 import { AnimatePresence, motion } from 'framer-motion';

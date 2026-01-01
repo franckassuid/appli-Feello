@@ -5,6 +5,7 @@ import { AdminPanel } from './components/AdminPanel';
 import { AnimatePresence, motion } from 'framer-motion';
 import { questions as initialQuestions, type Question } from './data/questions';
 import { subscribeToQuestions, addQuestionToFirebase, updateQuestionInFirebase, deleteQuestionFromFirebase } from './services/questions';
+import { PwaInstallPrompt } from './components/PwaInstallPrompt';
 import './App.css';
 
 type View = 'intro' | 'game' | 'admin';
@@ -150,6 +151,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
+      <PwaInstallPrompt />
     </div>
   );
 }
