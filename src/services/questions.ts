@@ -21,14 +21,13 @@ export const migrateQuestionsToFirebase = async () => {
         const snapshot = await getDocs(collectionRef);
 
         if (!snapshot.empty) {
-            console.log('Collection not empty, migration skipped to avoid duplicates.');
+            alert('La base de données contient déjà des questions. Migration annulée pour éviter les doublons.');
             return;
         }
 
         const batch = writeBatch(db);
         initialQuestions.forEach((q) => {
             // Remove the numeric ID as Firestore generates string IDs
-            // or we can keep it as a field if needed.
             const { id, ...data } = q;
             const docRef = doc(collectionRef);
             batch.set(docRef, data);
@@ -36,8 +35,9 @@ export const migrateQuestionsToFirebase = async () => {
 
         await batch.commit();
         console.log('Migration successful!');
-    } catch (error) {
+    } catch (error: any) {
         console.error('Migration failed:', error);
+        alert(`Erreur lors de la migration : ${error.message || error}. Vérifiez la console et vos règles Firebase.`);
         throw error;
     }
 };
