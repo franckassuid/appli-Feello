@@ -117,20 +117,19 @@ export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDelet
             title,
             message,
             onConfirm: async () => {
-                onConfirm: async () => {
-                    setIsSubmitting(true);
-                    try {
-                        await action();
-                        closeConfirm();
-                    } catch (error) {
-                        console.error("Action failed:", error);
-                        alert("Une erreur est survenue.");
-                        closeConfirm();
-                    } finally {
-                        setIsSubmitting(false);
-                    }
+                setIsSubmitting(true);
+                try {
+                    await action();
+                    closeConfirm();
+                } catch (error) {
+                    console.error("Action failed:", error);
+                    alert("Une erreur est survenue.");
+                    closeConfirm();
+                } finally {
+                    setIsSubmitting(false);
                 }
-            });
+            }
+        });
     };
 
     const handleDeleteClick = (e: React.MouseEvent, id: string) => {
