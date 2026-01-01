@@ -53,7 +53,8 @@ function App() {
       await addQuestionToFirebase(q);
     } catch (e) {
       console.error("Error adding question", e);
-      alert("Erreur lors de l'ajout (vérifiez la console)");
+      alert("Erreur lors de l'ajout (vérifiez la console et votre connexion internet/règles Firebase)");
+      throw e;
     }
   };
 
@@ -62,6 +63,7 @@ function App() {
       await updateQuestionInFirebase(id, updates);
     } catch (error) {
       alert("Erreur lors de la modification de la question.");
+      throw error;
     }
   };
 
@@ -70,6 +72,7 @@ function App() {
       await deleteQuestionFromFirebase(id);
     } catch (error) {
       alert("Erreur lors de la suppression de la question.");
+      throw error;
     }
   };
 
