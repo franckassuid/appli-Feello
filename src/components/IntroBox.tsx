@@ -14,24 +14,19 @@ const Model = () => {
     const { scene } = useGLTF('/boite_feeloo_v2.1.glb');
     const ref = useRef<THREE.Group>(null);
 
-    const { size, viewport } = useThree();
+    const { viewport } = useThree();
 
-    // Dynamic Scale Calculation matching CSS: min(505px, 65vh)
-    const MAX_CARD_HEIGHT_PX = 505;
-    const VH_FACTOR = 0.65;
-    const PADDING_PX = 20;
-    const MODEL_HEIGHT_FACTOR = 27;
+    // Approximate raw dimensions of the model
+    const MODEL_RAW_HEIGHT = 27;
+    const MODEL_RAW_WIDTH = 18;
 
-    // Calculate height in pixels (replicating CSS logic)
-    // Note: size.height is roughly window.innerHeight since canvas is full screen
-    const cardHeightPx = Math.min(MAX_CARD_HEIGHT_PX, size.height * VH_FACTOR);
+    // Calculate scale to fit ~85% of the available viewport (canvas wrapper)
+    // We check both height and width to ensure it fits on mobile screens
+    const scaleY = (viewport.height * 0.85) / MODEL_RAW_HEIGHT;
+    const scaleX = (viewport.width * 0.85) / MODEL_RAW_WIDTH;
+    const targetScale = Math.min(scaleX, scaleY);
 
-    // Convert to 3D units
-    const pixelToThreeRatio = viewport.height / size.height;
-    const targetHeightThree = (cardHeightPx + PADDING_PX) * pixelToThreeRatio;
-
-    const targetScale = targetHeightThree / MODEL_HEIGHT_FACTOR;
-    const idleScale = targetScale * 0.8;
+    const idleScale = targetScale;
 
     // Initial rotation (Opposite wide face) as requested
     const INITIAL_ROTATION_Y = Math.PI * 1.5 + 0.5;
