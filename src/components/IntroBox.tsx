@@ -20,10 +20,10 @@ const Model = () => {
     const MODEL_RAW_HEIGHT = 27;
     const MODEL_RAW_WIDTH = 18;
 
-    // Calculate scale to fit ~85% of the available viewport (canvas wrapper)
+    // Calculate scale to fit ~95% of the available viewport (canvas wrapper)
     // We check both height and width to ensure it fits on mobile screens
-    const scaleY = (viewport.height * 0.85) / MODEL_RAW_HEIGHT;
-    const scaleX = (viewport.width * 0.85) / MODEL_RAW_WIDTH;
+    const scaleY = (viewport.height * 0.95) / MODEL_RAW_HEIGHT;
+    const scaleX = (viewport.width * 0.95) / MODEL_RAW_WIDTH;
     const targetScale = Math.min(scaleX, scaleY);
 
     const idleScale = targetScale;
