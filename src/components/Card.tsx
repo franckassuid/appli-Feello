@@ -48,6 +48,7 @@ export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, isFr
                 transition: { duration: 0.3 }
             });
         } else {
+            // Back card position - fade in slowly to avoid glitches when switching
             controls.start({
                 x: 0,
                 opacity: 1,
@@ -55,7 +56,7 @@ export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, isFr
                 rotate: 0,
                 y: 10,
                 zIndex: 1,
-                transition: { duration: 0 }
+                transition: { duration: 0.4, delay: 0.1 }
             });
         }
     }, [isFront, controls]);
@@ -151,9 +152,10 @@ export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, isFr
                 x: 0,
                 rotate: 0
             } : {
+                // Back card initial
                 scale: 0.95,
                 y: 10,
-                opacity: 1,
+                opacity: 0,
                 x: 0,
                 rotate: 0
             }}
