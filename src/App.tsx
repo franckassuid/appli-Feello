@@ -4,7 +4,7 @@ import { GameDeck } from './components/GameDeck';
 import { AdminPanel } from './components/AdminPanel';
 import { AnimatePresence, motion } from 'framer-motion';
 import { questions as initialQuestions, type Question } from './data/questions';
-import { subscribeToQuestions, addQuestionToFirebase, updateQuestionInFirebase, deleteQuestionFromFirebase } from './services/questions';
+import { subscribeToQuestions, addQuestionToFirebase, updateQuestionInFirebase, deleteQuestionFromFirebase, migrateQuestionsToFirebase } from './services/questions';
 import './App.css';
 
 type View = 'intro' | 'game' | 'admin';
@@ -22,11 +22,11 @@ function App() {
 
     // Subscribe to Firestore updates
     const unsubscribe = subscribeToQuestions((fetchedQuestions) => {
+      // If we have questions from DB, use them.
+      // If DB is empty, use local fallback.
       if (fetchedQuestions.length > 0) {
         setQuestions(fetchedQuestions);
       } else {
-        // Fallback to local questions if DB is empty
-        // This allows seeing content before migration
         setQuestions(initialQuestions);
       }
       setLoading(false);
@@ -35,7 +35,7 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  // Fail-safe timeout: if Firestore takes too long (e.g. offline/cache issues), force load
+  // Fail-safe timeout
   useEffect(() => {
     const timer = setTimeout(() => {
       if (loading) {
@@ -43,7 +43,7 @@ function App() {
         if (questions.length === 0) setQuestions(initialQuestions);
         setLoading(false);
       }
-    }, 4000); // 4 seconds max wait
+    }, 4000);
 
     return () => clearTimeout(timer);
   }, [loading, questions]);
@@ -51,7 +51,6 @@ function App() {
   const handleAddQuestion = async (q: Omit<Question, 'id'>) => {
     try {
       await addQuestionToFirebase(q);
-      // No need to manually update state, subscription will handle it
     } catch (e) {
       console.error("Error adding question", e);
       alert("Erreur lors de l'ajout (vérifiez la console)");
@@ -72,6 +71,10 @@ function App() {
     } catch (error) {
       alert("Erreur lors de la suppression de la question.");
     }
+  };
+
+  const handleMigrate = async () => {
+    await migrateQuestionsToFirebase();
   };
 
   return (
@@ -141,6 +144,7 @@ function App() {
               onAddQuestion={handleAddQuestion}
               onUpdateQuestion={handleUpdateQuestion}
               onDeleteQuestion={handleDeleteQuestion}
+              onMigrate={handleMigrate}
               onBack={() => setView('intro')}
             />
           </motion.div>

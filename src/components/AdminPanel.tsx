@@ -9,6 +9,7 @@ interface AdminPanelProps {
     onAddQuestion: (q: Omit<Question, 'id'>) => Promise<void>;
     onUpdateQuestion: (id: string, q: Partial<Question>) => Promise<void>;
     onDeleteQuestion: (id: string) => Promise<void>;
+    onMigrate?: () => Promise<void>;
     onBack: () => void;
 }
 
@@ -27,7 +28,7 @@ interface ConfirmationState {
     onConfirm: () => Promise<void>;
 }
 
-export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDeleteQuestion, onBack }: AdminPanelProps) => {
+export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDeleteQuestion, onMigrate, onBack }: AdminPanelProps) => {
     // Auth State
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [password, setPassword] = useState('');
@@ -47,6 +48,7 @@ export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDelet
         message: '',
         onConfirm: async () => { }
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
@@ -115,8 +117,19 @@ export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDelet
             title,
             message,
             onConfirm: async () => {
-                await action();
-                closeConfirm();
+                console.log("Confirm clicked, starting action...");
+                setIsSubmitting(true);
+                try {
+                    await action();
+                    console.log("Action completed, closing modal.");
+                    closeConfirm();
+                } catch (error) {
+                    console.error("Action failed:", error);
+                    alert("Une erreur est survenue.");
+                    closeConfirm();
+                } finally {
+                    setIsSubmitting(false);
+                }
             }
         });
     };
@@ -180,6 +193,7 @@ export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDelet
                             placeholder="Mot de passe"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
+                            autoComplete="current-password"
                             autoFocus
                         />
                         <button type="submit">Entrer</button>
@@ -202,7 +216,33 @@ export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDelet
                 </div>
             </header>
 
+
+
             <div className="admin-content">
+                {onMigrate && (
+                    <div style={{ marginBottom: '1rem', padding: '0 1rem' }}>
+                        <button
+                            onClick={async () => {
+                                if (confirm('Voulez-vous vraiment importer les questions locales ? Cela ajoutera celles qui manquent à la base de données.')) {
+                                    await onMigrate();
+                                }
+                            }}
+                            className="action-btn"
+                            style={{
+                                padding: '0.5rem 1rem',
+                                background: '#E7237F',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                fontSize: '0.9rem',
+                                width: '100%',
+                            }}
+                        >
+                            📤 Importer les questions locales (Migration)
+                        </button>
+                    </div>
+                )}
                 <div className="admin-column left-main">
                     <div className="admin-card create-card">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
@@ -325,22 +365,24 @@ export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDelet
             </div>
 
             {/* Custom Confirmation Modal */}
-            {confirmModal.show && (
-                <div className="admin-modal-overlay">
-                    <div className="admin-modal-content">
-                        <h3>{confirmModal.title}</h3>
-                        <p>{confirmModal.message}</p>
-                        <div className="modal-actions">
-                            <button className="modal-btn cancel" onClick={closeConfirm}>
-                                Annuler
-                            </button>
-                            <button className="modal-btn confirm" onClick={confirmModal.onConfirm}>
-                                Confirmer
-                            </button>
+            {
+                confirmModal.show && (
+                    <div className="admin-modal-overlay">
+                        <div className="admin-modal-content">
+                            <h3>{confirmModal.title}</h3>
+                            <p>{confirmModal.message}</p>
+                            <div className="modal-actions">
+                                <button className="modal-btn cancel" onClick={closeConfirm} disabled={isSubmitting}>
+                                    Annuler
+                                </button>
+                                <button className="modal-btn confirm" onClick={confirmModal.onConfirm} disabled={isSubmitting}>
+                                    {isSubmitting ? 'Patientez...' : 'Confirmer'}
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 };

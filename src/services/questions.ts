@@ -22,27 +22,38 @@ export const migrateQuestionsToFirebase = async () => {
         const collectionRef = collection(db, COLLECTION_NAME);
         const snapshot = await getDocs(collectionRef);
 
-        if (!snapshot.empty) {
-            alert('La base de données contient déjà des questions. Migration annulée pour éviter les doublons.');
-            return;
-        }
+        const existingTexts = new Set(
+            snapshot.docs.map(doc => (doc.data().text || '').trim())
+        );
 
         const batch = writeBatch(db);
+        let addedCount = 0;
+
         initialQuestions.forEach((q) => {
-            // Remove the numeric ID as Firestore generates string IDs
-            const { id, ...data } = q;
-            const docRef = doc(collectionRef);
-            batch.set(docRef, {
-                ...data,
-                createdAt: serverTimestamp() // Add date to migrated questions too
-            });
+            const normalizedText = q.text.trim();
+            if (!existingTexts.has(normalizedText)) {
+                // Remove the numeric ID as Firestore generates string IDs
+                const { id, ...data } = q;
+                const docRef = doc(collectionRef);
+                batch.set(docRef, {
+                    ...data,
+                    createdAt: serverTimestamp()
+                });
+                addedCount++;
+            }
         });
 
-        await batch.commit();
-        console.log('Migration successful!');
+        if (addedCount > 0) {
+            await batch.commit();
+            console.log(`Migration successful! Added ${addedCount} questions.`);
+            alert(`Migration réussie ! ${addedCount} questions ont été ajoutées à la base de données.`);
+        } else {
+            console.log('All local questions already exist in remote.');
+            alert('Toutes les questions locales sont déjà présentes dans la base de données.');
+        }
     } catch (error: any) {
         console.error('Migration failed:', error);
-        alert(`Erreur lors de la migration : ${error.message || error}. Vérifiez la console et vos règles Firebase.`);
+        alert(`Erreur lors de la migration : ${error.message || error}. Vérifiez la console.`);
         throw error;
     }
 };
