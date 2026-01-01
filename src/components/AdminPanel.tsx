@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { themes } from '../data/questions';
 import type { Question, ThemeColor } from '../data/questions';
 import { FeelloButton } from './FeelloButton';

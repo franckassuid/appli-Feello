@@ -20,11 +20,13 @@
     width: 100%;
     position: relative;
     flex-shrink: 0;
+    pointer-events: none;
 }
 
 .main-logo {
     height: 70px;
     transition: opacity 0.2s;
+    pointer-events: auto;
 }
 
 .main-logo:active {
@@ -77,4 +79,191 @@
     background: rgba(255, 255, 255, 0.1);
     color: white;
     border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* MENU STYLES */
+.menu-burger-btn {
+    position: absolute;
+    top: 2rem;
+    right: 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 110;
+    /* Above top-bar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    transition: transform 0.2s;
+}
+
+.menu-burger-btn:active {
+    transform: scale(0.9);
+}
+
+.game-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-menu-content {
+    background: linear-gradient(145deg, #1a1a1a, #222);
+    width: 90%;
+    max-width: 380px;
+    padding: 2rem;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    position: relative;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.close-menu-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 50%;
+    line-height: 0;
+}
+
+.close-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.filter-section h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+    text-align: center;
+}
+
+.filter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    padding: 0.8rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+
+.filter-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.filter-item.active {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.filter-checkbox {
+    width: 22px;
+    height: 22px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+/* When active, checkbox takes color of theme */
+.filter-item.active .filter-checkbox {
+    background: var(--theme-color, white);
+    border-color: var(--theme-color, white);
+    color: white;
+    /* tick color */
+}
+
+.filter-label {
+    font-size: 1rem;
+    font-weight: 500;
+    flex: 1;
+}
+
+.refresh-btn {
+    margin-top: 1rem;
+    background: transparent;
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+    padding: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.refresh-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: white;
+}
+
+.refresh-btn:active {
+    transform: scale(0.98);
+}
+
+.menu-footer {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.social-link img {
+    width: 32px;
+    height: 32px;
+    display: block;
+}
+
+.social-link:hover {
+    transform: scale(1.1);
 }
