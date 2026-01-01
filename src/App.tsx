@@ -1,8 +1,5 @@
-import { useState, useEffect, Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { Environment } from '@react-three/drei';
+import { useState, useEffect } from 'react';
 import { IntroBox } from './components/IntroBox';
-import { FeelloModel } from './components/FeelloModel';
 import { GameDeck } from './components/GameDeck';
 import { AdminPanel } from './components/AdminPanel';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -88,18 +85,22 @@ function App() {
             className="game-wrapper"
           >
             {loading ? (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: '20px' }}>
-                <div style={{ fontSize: '1.2rem', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.8, color: 'white' }}>Chargement</div>
-                <div style={{ width: '100px', height: '100px' }}>
-                  <Canvas camera={{ position: [0, 0, 4] }}>
-                    <ambientLight intensity={2} />
-                    <pointLight position={[10, 10, 10]} />
-                    <Suspense fallback={null}>
-                      <FeelloModel scale={2} autoRotate />
-                      <Environment preset="city" />
-                    </Suspense>
-                  </Canvas>
-                </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', color: 'white' }}>
+                <div className="spinner"></div>
+                <div style={{ marginTop: '20px', fontSize: '1.2rem', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.8 }}>Chargement</div>
+                <style>{`
+                    .spinner {
+                        width: 50px;
+                        height: 50px;
+                        border: 5px solid rgba(255, 255, 255, 0.3);
+                        border-radius: 50%;
+                        border-top-color: white;
+                        animation: spin 1s ease-in-out infinite;
+                    }
+                    @keyframes spin {
+                        to { transform: rotate(360deg); }
+                    }
+                 `}</style>
               </div>
             ) : questions.length > 0 ? (
               <GameDeck
