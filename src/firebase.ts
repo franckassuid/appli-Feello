@@ -12,6 +12,13 @@ const firebaseConfig = {
     appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
+const requiredKeys = ['apiKey', 'projectId', 'appId'];
+const missingKeys = requiredKeys.filter(key => !firebaseConfig[key as keyof typeof firebaseConfig]);
+
+if (missingKeys.length > 0) {
+    console.error(`Firebase Config Error: Missing environment variables for: ${missingKeys.join(', ')}. Check your Vercel Project Settings.`);
+}
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);

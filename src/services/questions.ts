@@ -20,7 +20,7 @@ export const subscribeToQuestions = (callback: (questions: Question[]) => void) 
 export const migrateQuestionsToFirebase = async () => {
     try {
         const collectionRef = collection(db, COLLECTION_NAME);
-        const snapshot = await getDocs(collectionRef);
+        const snapshot = await withTimeout(getDocs(collectionRef), 10000, "Checking collection");
 
         const existingTexts = new Set(
             snapshot.docs.map(doc => (doc.data().text || '').trim())
@@ -58,12 +58,24 @@ export const migrateQuestionsToFirebase = async () => {
     }
 };
 
+// Helper to force timeout if Firestore hangs (e.g. missing connection/auth)
+const withTimeout = <T>(promise: Promise<T>, ms: number = 10000, context: string): Promise<T> => {
+    return Promise.race([
+        promise,
+        new Promise<T>((_, reject) => setTimeout(() => reject(new Error(`${context} timed out after ${ms}ms`)), ms))
+    ]);
+};
+
 export const addQuestionToFirebase = async (question: Omit<Question, 'id'>) => {
     try {
-        await addDoc(collection(db, COLLECTION_NAME), {
-            ...question,
-            createdAt: serverTimestamp()
-        });
+        await withTimeout(
+            addDoc(collection(db, COLLECTION_NAME), {
+                ...question,
+                createdAt: serverTimestamp()
+            }),
+            10000,
+            "Adding question"
+        );
     } catch (error) {
         console.error('Error adding question:', error);
         throw error;
@@ -72,7 +84,7 @@ export const addQuestionToFirebase = async (question: Omit<Question, 'id'>) => {
 
 export const deleteQuestionFromFirebase = async (id: string) => {
     try {
-        await deleteDoc(doc(db, COLLECTION_NAME, id));
+        await withTimeout(deleteDoc(doc(db, COLLECTION_NAME, id)), 10000, "Deleting question");
     } catch (error) {
         console.error('Error deleting question:', error);
         throw error;
@@ -81,7 +93,7 @@ export const deleteQuestionFromFirebase = async (id: string) => {
 
 export const updateQuestionInFirebase = async (id: string, updates: Partial<Question>) => {
     try {
-        await updateDoc(doc(db, COLLECTION_NAME, id), updates);
+        await withTimeout(updateDoc(doc(db, COLLECTION_NAME, id), updates), 10000, "Updating question");
     } catch (error) {
         console.error('Error updating question:', error);
         throw error;
