@@ -7,7 +7,7 @@ import * as THREE from 'three';
 export const FeelloModel = ({ scale = 1, autoRotate = false }) => {
     const { scene, animations } = useGLTF('/boite_feeloo_v2.1.glb');
     const ref = useRef<THREE.Group>(null);
-    const { actions } = useAnimations(animations, ref);
+    useAnimations(animations, ref);
 
     // Initial rotation (Opposite wide face) as requested
     const INITIAL_ROTATION_Y = Math.PI * 1.5 + 0.5;

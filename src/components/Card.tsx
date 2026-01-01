@@ -33,7 +33,6 @@ export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, onDr
     // ... existing useEffect
     const controls = useAnimation();
     const rotate = useTransform(x, [-300, 300], [-15, 15]);
-    const [isDragging, setIsDragging] = useState(false);
 
     useImperativeHandle(ref, () => ({
         swipe: async (direction: 'left' | 'right') => {
@@ -78,7 +77,6 @@ export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, onDr
     }, [isFront, controls]);
 
     const handleDragEnd = async (_: any, info: PanInfo) => {
-        setIsDragging(false);
         if (!onSwipe) return;
         const threshold = 100;
         const velocity = info.velocity.x;
@@ -131,7 +129,6 @@ export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, onDr
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.6}
             onDrag={handleDrag}
-            onDragStart={() => setIsDragging(true)}
             onDragEnd={handleDragEnd}
             animate={controls}
             // Start at "Back" position if mounting as Front
