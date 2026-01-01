@@ -15,6 +15,13 @@ const firebaseConfig = {
 const requiredKeys = ['apiKey', 'projectId', 'appId'];
 const missingKeys = requiredKeys.filter(key => !firebaseConfig[key as keyof typeof firebaseConfig]);
 
+console.log("Firebase Env Check:", {
+    hasApiKey: !!firebaseConfig.apiKey,
+    hasProjectId: !!firebaseConfig.projectId,
+    hasAppId: !!firebaseConfig.appId,
+    raw: JSON.stringify(firebaseConfig)
+});
+
 if (missingKeys.length > 0) {
     console.error(`Firebase Config Error: Missing environment variables for: ${missingKeys.join(', ')}. Check your Vercel Project Settings.`);
 }
