@@ -9,7 +9,6 @@ interface AdminPanelProps {
     onAddQuestion: (q: Omit<Question, 'id'>) => Promise<void>;
     onUpdateQuestion: (id: string, q: Partial<Question>) => Promise<void>;
     onDeleteQuestion: (id: string) => Promise<void>;
-    onDeleteQuestion: (id: string) => Promise<void>;
     onBack: () => void;
 }
 

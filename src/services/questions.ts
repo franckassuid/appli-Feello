@@ -1,4 +1,4 @@
-import { collection, getDocs, addDoc, query, onSnapshot, doc, deleteDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, query, onSnapshot, doc, deleteDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { type Question } from '../data/questions';
 
