@@ -310,7 +310,7 @@ export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDelet
                                 <div className="q-content">
                                     <div className="q-meta">
                                         <span className="q-cat" style={{ color: themes[q.theme] }}>{q.category}</span>
-                                        <span className="q-tag">{q.tagline}</span>
+                                        <span className="q-tag">{q.tagline.slice(1)}</span>
                                     </div>
                                     <p className="q-text">{q.text}</p>
                                 </div>

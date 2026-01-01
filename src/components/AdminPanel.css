@@ -348,24 +348,30 @@
 .q-meta {
     display: flex;
     align-items: baseline;
-    gap: 0.8rem;
+    gap: 0px;
+    /* Merged visually */
     margin-bottom: 0.6rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    /* Prevent wrapping so they stay on one line */
 }
 
 .q-cat {
-    font-weight: 900;
-    font-size: 1.4rem;
+    font-weight: 800;
+    font-size: 2.2rem;
     line-height: 1;
+    /* Remove any default margins if present */
+    margin: 0;
 }
 
 .q-tag {
-    font-size: 0.75rem;
-    color: #888;
-    text-transform: uppercase;
-    font-weight: 600;
+    font-size: 1.1rem;
+    color: #ccc;
+    text-transform: none;
+    font-weight: 500;
     letter-spacing: 0.5px;
+    line-height: 1.2;
 }
+
 
 .q-text {
     margin: 0;

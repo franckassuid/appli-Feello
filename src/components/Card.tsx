@@ -63,13 +63,13 @@ export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, onDr
                 transition: { duration: 0.3 }
             });
         } else {
-            // Back card position - fade in slowly to avoid glitches when switching
+            // Back card position - messy stack effect
             controls.start({
                 x: 0,
                 opacity: 1,
-                scale: 0.95,
-                rotate: 0,
-                y: 10,
+                scale: 0.94,
+                rotate: -3, // Slightly tilted
+                y: 12,      // Peeking from bottom
                 zIndex: 1,
                 transition: { duration: 0.4, delay: 0.1 }
             });

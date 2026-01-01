@@ -267,3 +267,305 @@
 .social-link:hover {
     transform: scale(1.1);
 }
+
+/* === CONFIRMATION MODAL === */
+.confirm-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+}
+
+.confirm-modal-content {
+    background: #1e1e1e;
+    padding: 2rem;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 350px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    animation: scaleIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10000;
+}
+
+.confirm-modal-content h3 {
+    color: #f1efea;
+    margin-top: 0;
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+}
+
+.confirm-modal-content p {
+    color: #aaa;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+    font-size: 1rem;
+}
+
+.confirm-modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.confirm-modal-btn {
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+    flex: 1;
+}
+
+.confirm-modal-btn.cancel {
+    background: transparent;
+    border: 1px solid #555;
+    color: #ccc;
+}
+
+.confirm-modal-btn.cancel:hover {
+    border-color: #fff;
+    color: #fff;
+}
+
+.confirm-modal-btn.confirm {
+    background: #E7237F;
+    color: white;
+    box-shadow: 0 4px 15px rgba(231, 35, 127, 0.3);
+}
+
+.confirm-modal-btn.confirm:hover {
+    transform: translateY(-2px);
+    background: #d61a71;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* === END GAME SCREEN === */
+.end-game-screen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    box-sizing: border-box;
+    /* Ensure it takes full viewport but respects padding */
+}
+
+.end-game-title {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.end-game-message {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 3rem;
+    max-width: 400px;
+    line-height: 1.5;
+}
+
+.end-game-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 320px;
+    align-items: center;
+    /* Center FeelloButtons */
+}
+
+.btn-base {
+    padding: 1rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-base:hover {
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background: white;
+    color: #1a1a1a;
+    border: none;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:active {
+    background: #e6e6e6;
+    transform: scale(0.98);
+}
+
+.btn-primary:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
+}
+
+.btn-tertiary {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.5);
+    border: 1px solid transparent;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    padding: 0.8rem;
+    text-transform: none;
+    /* Less shouting */
+}
+
+.btn-tertiary:hover {
+    color: white;
+}
+
+/* === SHUFFLE BUTTON === */
+.shuffle-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.shuffle-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+
+.shuffle-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border-color: white;
+    transform: rotate(180deg);
+    /* Fun interaction */
+}
+
+.shuffle-btn:active {
+    transform: scale(0.9);
+}
+
+/* === CARD STACK DEPTH EFFECT === */
+.dummy-card-layer {
+    grid-area: 1 / 1;
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 3/4;
+    border-radius: 20px;
+    background: #2a2a2a;
+    pointer-events: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    /* Colors and transforms are handled inline for randomness */
+}
+
+/* === SHUFFLE ANIMATION === */
+@keyframes shuffleShake {
+    0% {
+        transform: translateX(0) scale(1);
+    }
+
+    25% {
+        transform: translateX(-10px) rotate(-2deg) scale(0.95);
+    }
+
+    50% {
+        transform: translateX(10px) rotate(2deg) scale(0.95);
+    }
+
+    75% {
+        transform: translateX(-5px) rotate(-1deg) scale(0.98);
+    }
+
+    100% {
+        transform: translateX(0) scale(1);
+    }
+}
+
+.cards-stack.shuffling>* {
+    /* We override the inline transform temporarily using !important or composing transformations */
+    /* Issue: inline styles have precedence. We need !important to force the animation */
+    /* Or better: applied to a wrapper or handle transform differently. */
+    /* Actually keyframe animations override transforms unless they depend on variables */
+    animation: shuffleShake 0.5s ease-in-out both;
+}
+
+/* Make the shuffle button spin during shuffle */
+.shuffle-btn.spinning {
+    animation: spin 0.5s linear infinite;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
