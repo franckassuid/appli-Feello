@@ -1,5 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { Environment } from '@react-three/drei';
 import { IntroBox } from './components/IntroBox';
+import { FeelloModel } from './components/FeelloModel';
 import { GameDeck } from './components/GameDeck';
 import { AdminPanel } from './components/AdminPanel';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -85,8 +88,18 @@ function App() {
             className="game-wrapper"
           >
             {loading ? (
-              <div style={{ color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                Chargement...
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: '20px' }}>
+                <div style={{ fontSize: '1.2rem', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.8, color: 'white' }}>Chargement</div>
+                <div style={{ width: '100px', height: '100px' }}>
+                  <Canvas camera={{ position: [0, 0, 4] }}>
+                    <ambientLight intensity={2} />
+                    <pointLight position={[10, 10, 10]} />
+                    <Suspense fallback={null}>
+                      <FeelloModel scale={2} autoRotate />
+                      <Environment preset="city" />
+                    </Suspense>
+                  </Canvas>
+                </div>
               </div>
             ) : questions.length > 0 ? (
               <GameDeck

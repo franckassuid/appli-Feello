@@ -1,7 +1,7 @@
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useGLTF, Environment, ContactShadows, OrbitControls } from '@react-three/drei';
+import { Canvas, useThree } from '@react-three/fiber';
+import { Environment, ContactShadows, OrbitControls } from '@react-three/drei';
 import { useState, useRef, Suspense, useEffect } from 'react';
-import * as THREE from 'three';
+import { FeelloModel } from './FeelloModel';
 import { motion, AnimatePresence } from 'framer-motion';
 import './IntroBox.css';
 import { FeelloButton } from './FeelloButton';
@@ -10,54 +10,15 @@ interface IntroBoxProps {
     onOpen: () => void;
 }
 
-const Model = () => {
-    const { scene } = useGLTF('/boite_feeloo_v2.1.glb');
-    const ref = useRef<THREE.Group>(null);
-
+const ResponsiveModel = () => {
     const { viewport } = useThree();
-
-    // Approximate raw dimensions of the model
     const MODEL_RAW_HEIGHT = 27;
     const MODEL_RAW_WIDTH = 18;
-
-    // Calculate scale to fit ~95% of the available viewport (canvas wrapper)
-    // We check both height and width to ensure it fits on mobile screens
     const scaleY = (viewport.height * 0.95) / MODEL_RAW_HEIGHT;
     const scaleX = (viewport.width * 0.95) / MODEL_RAW_WIDTH;
     const targetScale = Math.min(scaleX, scaleY);
 
-    const idleScale = targetScale;
-
-    // Initial rotation (Opposite wide face) as requested
-    const INITIAL_ROTATION_Y = Math.PI * 1.5 + 0.5;
-
-    useFrame((state) => {
-        if (ref.current) {
-            // Constant Idle Hover
-            ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.05;
-            ref.current.position.x = 0;
-            ref.current.position.z = 0;
-            ref.current.rotation.y = INITIAL_ROTATION_Y + Math.sin(state.clock.elapsedTime * 0.2) * 0.1; // Slow rotation sway
-            ref.current.rotation.x = 0;
-            ref.current.rotation.z = 0;
-
-            // Ensure scale is correct
-            ref.current.scale.setScalar(idleScale);
-        }
-    });
-
-    // useEffect for reset is removed as the model is always idle now
-
-    return (
-        <primitive
-            object={scene}
-            ref={ref}
-            // scale managed by logic
-            rotation={[0, INITIAL_ROTATION_Y, 0]}
-            onPointerOver={() => (document.body.style.cursor = 'grab')}
-            onPointerOut={() => (document.body.style.cursor = 'auto')}
-        />
-    );
+    return <FeelloModel scale={targetScale} />;
 };
 
 // Component to handle camera/control reset
@@ -123,7 +84,7 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
                     <pointLight position={[-10, 0, -10]} intensity={1.0} />
 
                     <Suspense fallback={null}>
-                        <Model />
+                        <ResponsiveModel />
                         <Environment preset="city" background={false} />
                         <ContactShadows position={[0, -.8, 0]} opacity={1} scale={10} blur={2.5} far={10} color="#000000" />
                         <SceneController isOpen={isOpen} />

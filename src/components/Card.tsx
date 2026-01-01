@@ -116,32 +116,6 @@ export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, onDr
         }
     };
 
-    const handleClick = (e: React.MouseEvent) => {
-        if (isDragging || !onSwipe || !isFront) return;
-
-        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const third = rect.width / 3;
-
-        if (clickX > 2 * third) {
-            controls.start({
-                x: window.innerWidth + 200,
-                rotate: 45,
-                opacity: 0,
-                scale: 0.8,
-                transition: { duration: 0.3 }
-            }).then(() => onSwipe('right'));
-        } else if (clickX < third) {
-            controls.start({
-                x: -window.innerWidth - 200,
-                rotate: -45,
-                opacity: 0,
-                scale: 0.8,
-                transition: { duration: 0.3 }
-            }).then(() => onSwipe('left'));
-        }
-    };
-
     const themeColor = themes[question.theme];
 
     return (
@@ -159,7 +133,6 @@ export const Card = forwardRef<CardHandle, CardProps>(({ question, onSwipe, onDr
             onDrag={handleDrag}
             onDragStart={() => setIsDragging(true)}
             onDragEnd={handleDragEnd}
-            onClick={handleClick}
             animate={controls}
             // Start at "Back" position if mounting as Front
             initial={isFront ? {
