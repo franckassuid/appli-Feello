@@ -7,14 +7,13 @@
     width: calc(min(505px, var(--max-h)) * var(--ratio));
 
     /* Ratio ~1.58 (Credit Card Portrait) */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) !important;
-    transform-style: preserve-3d;
+    /* Remove absolute and transform !important to let Framer Motion handle position */
+    grid-area: 1 / 1;
     cursor: grab;
     z-index: 5;
     touch-action: none;
+    /* Maintain 3D for flip/rotation effects if any */
+    transform-style: preserve-3d;
 }
 
 .card-container:active {

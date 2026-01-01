@@ -49,21 +49,23 @@ export const GameDeck = ({ questions }: GameDeckProps) => {
             </div>
 
             {/* Stack Implementation */}
-            {/* Back Card (Next) */}
-            <Card
-                key={`back-${nextQuestion.id}`}
-                question={nextQuestion}
-                isFront={false}
-            />
+            <div className="cards-stack">
+                {/* Back Card (Next) */}
+                <Card
+                    key={`back-${nextQuestion.id}`}
+                    question={nextQuestion}
+                    isFront={false}
+                />
 
-            {/* Front Card (Current) */}
-            <Card
-                ref={cardRef}
-                key={`front-${currentQuestion.id}`}
-                question={currentQuestion}
-                isFront={true}
-                onSwipe={handleSwipe}
-            />
+                {/* Front Card (Current) */}
+                <Card
+                    ref={cardRef}
+                    key={`front-${currentQuestion.id}`}
+                    question={currentQuestion}
+                    isFront={true}
+                    onSwipe={handleSwipe}
+                />
+            </div>
 
             <div className="deck-instruction">
                 <button
