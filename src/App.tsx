@@ -15,6 +15,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log("App version: fixed-errors-ui v2");
     // Basic routing check
     if (window.location.pathname === '/admin') {
       setView('admin');
