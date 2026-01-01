@@ -27,6 +27,7 @@ body {
   background-image: url('/bg-texture.png');
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
   background-blend-mode: overlay;
   /* Blend nicely with the dark green */
 

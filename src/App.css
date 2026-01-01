@@ -4,12 +4,7 @@
   height: 100dvh;
   position: relative;
   overflow: hidden;
-  background-color: #20473C;
-  /* Lighter Green */
-  background-image: url('/bg-texture.png');
-  background-size: cover;
-  background-position: center;
-  background-blend-mode: overlay;
+  background: transparent;
 }
 
 /* Ensure overlap */
