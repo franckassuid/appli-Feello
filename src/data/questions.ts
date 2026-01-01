@@ -1,4 +1,4 @@
-export type ThemeColor = 'orange' | 'dark-green' | 'olive' | 'pink' | 'purple';
+export type ThemeColor = 'orange' | 'black' | 'olive' | 'pink' | 'blue';
 
 export interface Question {
     id: number;
@@ -9,11 +9,12 @@ export interface Question {
 }
 
 export const themes: Record<ThemeColor, string> = {
-    'orange': '#E68C3C',
-    'dark-green': '#20473C',
-    'olive': '#7F802F',
-    'pink': '#E7237F',
-    'purple': '#736FAD'
+    'orange': '#E68C3C', // aspiration & préférence
+    'black': '#20473C',  // existence & philosophie (Dark Green)
+    'olive': '#7F802F',  // identité & introspection
+    'pink': '#E7237F',   // relation & interaction
+    'blue': '#736FAD'    // réflexion & expérience (Purple/Blue)
+    // 'cream': '#F1EFEA' // (Not used for cards deck background)
 };
 
 export const questions: Question[] = [
@@ -26,31 +27,30 @@ export const questions: Question[] = [
     },
     {
         id: 2,
-        theme: 'purple',
+        theme: 'blue',
         category: 'R',
         tagline: 'réflexion & expérience',
-        text: "Quelle est la dernière fois où tu as fait quelque chose pour la première fois ?"
+        text: "Quelle est la leçon la plus importante que tu aies apprise cette année ?"
     },
-    // Adding more varied questions based on typical game content (invented for now)
     {
         id: 3,
         theme: 'pink',
-        category: 'E',
-        tagline: 'émotion & ressenti',
+        category: 'R',
+        tagline: 'relation & interaction',
         text: "Quel est le compliment qui t'a le plus touché(e) récemment ?"
     },
     {
         id: 4,
         theme: 'olive',
-        category: 'V',
-        tagline: 'vision & projection',
+        category: 'I',
+        tagline: 'identité & introspection',
         text: "Si tu pouvais changer une décision de ton passé, laquelle serait-ce ?"
     },
     {
         id: 5,
-        theme: 'dark-green',
-        category: 'C',
-        tagline: 'connexion & relation',
-        text: "Quelle est la qualité que tu admires le plus chez les autres ?"
+        theme: 'black',
+        category: 'E',
+        tagline: 'existence & philosophie',
+        text: "Qu'est-ce qui donne le plus de sens à ta vie aujourd'hui ?"
     }
 ];
