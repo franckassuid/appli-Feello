@@ -200,3 +200,47 @@
     color: white;
     font-weight: 700;
 }
+
+/* Close Button Styles */
+.close-btn {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    z-index: 101;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s;
+}
+
+.close-btn:active {
+    transform: scale(0.9);
+}
+
+@media (max-width: 600px) {
+
+    /* Ensure card is pushed down so the close button (fixed at top) doesn't overlap */
+    .rules-modal {
+        padding-top: 5rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        align-items: center;
+    }
+
+    .rules-content {
+        padding: 1.5rem;
+        width: 100%;
+        max-width: 100%;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+}

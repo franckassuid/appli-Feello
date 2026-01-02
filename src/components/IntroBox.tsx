@@ -127,24 +127,6 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
                         <button
                             className="close-btn"
                             onClick={() => setShowRules(false)}
-                            style={{
-                                position: 'absolute',
-                                top: '2rem',
-                                right: '2rem',
-                                background: 'rgba(255,255,255,0.2)',
-                                backdropFilter: 'blur(4px)',
-                                border: '2px solid rgba(255,255,255,0.5)',
-                                borderRadius: '50%',
-                                width: '60px',
-                                height: '60px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: 'white',
-                                cursor: 'pointer',
-                                zIndex: 101, // Above everything
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
-                            }}
                         >
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M18 6L6 18" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
