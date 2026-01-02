@@ -1,5 +1,5 @@
 import { Canvas, useThree } from '@react-three/fiber';
-import { Environment, ContactShadows, OrbitControls } from '@react-three/drei';
+import { ContactShadows, OrbitControls } from '@react-three/drei';
 import { useState, useRef, Suspense, useEffect } from 'react';
 import { FeelloModel } from './FeelloModel';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -85,7 +85,7 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
 
                     <Suspense fallback={null}>
                         <ResponsiveModel />
-                        <Environment preset="city" background={false} />
+                        {/* Environment removed due to unstable CDN causing infinite loading */}
                         <ContactShadows position={[0, -.8, 0]} opacity={1} scale={10} blur={2.5} far={10} color="#000000" />
                         <SceneController isOpen={isOpen} />
                     </Suspense>
