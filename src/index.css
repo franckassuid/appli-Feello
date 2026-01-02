@@ -37,13 +37,15 @@ body {
   overflow-x: hidden;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  /* Start from top to avoid vertical gaps on mobile */
 }
 
 #root {
   width: 100%;
   max-width: 500px;
-  height: 100vh;
+  height: 100dvh;
+  /* Use dynamic viewport height */
   position: relative;
   display: flex;
   flex-direction: column;

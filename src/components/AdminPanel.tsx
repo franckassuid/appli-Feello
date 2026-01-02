@@ -182,7 +182,7 @@ export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDelet
             <div className="admin-panel login-mode">
                 <button onClick={onBack} className="back-btn absolute-back">← Retour</button>
                 <div className="login-container">
-                    <img src="/logo.png" alt="Feello" className="admin-logo" />
+                    <img src="/logo.png" alt="Feello" className="admin-logo" onClick={onBack} style={{ cursor: 'pointer' }} />
                     <h2>Accès Admin</h2>
                     <form onSubmit={handleLogin} className="login-form">
                         <input
@@ -205,7 +205,7 @@ export const AdminPanel = ({ questions, onAddQuestion, onUpdateQuestion, onDelet
         <div className="admin-panel">
             <header className="admin-header">
                 <div className="admin-branding">
-                    <img src="/logo.png" alt="Feello" className="admin-logo-img" />
+                    <img src="/logo.png" alt="Feello" className="admin-logo-img" onClick={onBack} style={{ cursor: 'pointer' }} />
                     <span className="admin-badge">ADMIN</span>
                 </div>
                 <div className="header-actions">

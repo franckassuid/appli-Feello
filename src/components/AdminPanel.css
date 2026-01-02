@@ -343,6 +343,8 @@
 .q-content {
     flex: 1;
     min-width: 0;
+    padding-right: 90px;
+    /* Space for absolute buttons */
 }
 
 .q-meta {
@@ -357,15 +359,15 @@
 
 .q-cat {
     font-weight: 800;
-    font-size: 2.2rem;
+    font-size: 1.5rem;
     line-height: 1;
     /* Remove any default margins if present */
     margin: 0;
 }
 
 .q-tag {
-    font-size: 1.1rem;
-    color: #ccc;
+    font-size: 0.9rem;
+    color: #6f6868;
     text-transform: none;
     font-weight: 500;
     letter-spacing: 0.5px;
@@ -385,9 +387,10 @@
 .q-actions {
     display: flex;
     gap: 0.5rem;
-    flex-shrink: 0;
-    padding-top: 5px;
-    /* Visual alignment with title */
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding-top: 0;
 }
 
 .action-btn {
@@ -466,13 +469,7 @@
         gap: 1rem;
         padding: 1rem;
     }
-
-    .q-actions {
-        width: 100%;
-        justify-content: flex-end;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        padding-top: 0.8rem;
-    }
+}
 }
 
 /* === Custom Confirmation Modal === */

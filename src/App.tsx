@@ -16,10 +16,17 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Basic routing check
+    window.scrollTo(0, 0);
+  }, [view]);
+
+  useEffect(() => {
     if (window.location.pathname === '/admin') {
       setView('admin');
     }
+
+    // Reset scroll on view change
+    window.scrollTo(0, 0);
+
 
     // Subscribe to Firestore updates
     const unsubscribe = subscribeToQuestions((fetchedQuestions) => {
@@ -123,6 +130,7 @@ function App() {
             ) : questions.length > 0 ? (
               <GameDeck
                 questions={questions}
+                onHome={() => setView('intro')}
               />
             ) : (
               <div style={{ color: 'white', textAlign: 'center', padding: '2rem' }}>

@@ -8,6 +8,7 @@ import './GameDeck.css';
 
 interface GameDeckProps {
     questions: Question[];
+    onHome?: () => void;
 }
 
 const THEME_LABELS: Record<ThemeColor, string> = {
@@ -20,7 +21,7 @@ const THEME_LABELS: Record<ThemeColor, string> = {
 
 const SEEN_STORAGE_KEY = 'feello_seen_ids';
 
-export const GameDeck = ({ questions }: GameDeckProps) => {
+export const GameDeck = ({ questions, onHome }: GameDeckProps) => {
     // 1. Persistent State: Seen Questions
     const [seenIds, setSeenIds] = useState<Set<string>>(() => {
         const stored = localStorage.getItem(SEEN_STORAGE_KEY);
@@ -268,7 +269,13 @@ export const GameDeck = ({ questions }: GameDeckProps) => {
     return (
         <div className="game-deck">
             <div className="top-bar">
-                <img src="/logo.png" alt="Feello" className="main-logo" onClick={() => window.location.reload()} style={{ cursor: 'pointer' }} />
+                <img
+                    src="/logo.png"
+                    alt="Feello"
+                    className="main-logo"
+                    onClick={onHome || (() => window.location.reload())}
+                    style={{ cursor: 'pointer' }}
+                />
             </div>
 
             <button className="menu-burger-btn" onClick={() => setMenuOpen(true)}>
