@@ -127,3 +127,14 @@
     transform: rotate(180deg);
     /* Requested change */
 }
+
+@media (max-width: 380px) {
+    .question-text {
+        font-size: 1.1rem;
+        line-height: 1.3;
+    }
+
+    .card-content {
+        padding: 1.5rem;
+    }
+}
