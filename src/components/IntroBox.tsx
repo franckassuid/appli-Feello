@@ -78,10 +78,10 @@ export const IntroBox = ({ onOpen }: IntroBoxProps) => {
             )}
 
             <div className="canvas-wrapper">
-                <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }}>
-                    <ambientLight intensity={5} />
-                    <spotLight position={[10, 10, 10]} angle={0.3} penumbra={1} intensity={3.0} />
-                    <pointLight position={[-10, 0, -10]} intensity={3.0} />
+                <Canvas camera={{ position: [0, 0, 4.2], fov: 45 }}>
+                    <ambientLight intensity={6} />
+                    <spotLight position={[10, 10, 10]} angle={0.3} penumbra={1} intensity={4} />
+                    <pointLight position={[-10, 0, -10]} intensity={2} />
 
                     <Suspense fallback={null}>
                         <ResponsiveModel />

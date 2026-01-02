@@ -88,7 +88,7 @@ function App() {
 
   return (
     <div className="app-container">
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {view === 'intro' && (
           <motion.div
             key="intro"
